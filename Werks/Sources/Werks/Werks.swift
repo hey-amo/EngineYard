@@ -1,2 +1,4 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
+// Werks - Package for Swift
+// Game engine, models for an unofficial clone of Locomotive Werks game
+
+
