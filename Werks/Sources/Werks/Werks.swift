@@ -9,6 +9,10 @@
  # Components:
  - 1 game board
     - 14 board spaces (linear sequence)
+        - Green
+        - Red
+        - Yellow
+ -
  - 43 locomotive cards
     - 20 Passenger locomotives (green)
         - (4 First Generation, 4 Second Generation, 4 Third Generation, 4 Fourth Generation, 4 Fifth Generation)
@@ -17,7 +21,7 @@
     - 7 Freight locomotives (yellow)
         - (2 First Generation, 2 Second Generation, 3 Third Generation)
     - 3 Special locomotives (blue)
-        - 1 First Generation, 2 Second Gene- ration)
+        - 1 First Generation, 2 Second Generation)
  - 5 Turn order cards (1-5)
  - 80 Production counters (Value: 1 or 2)
  - Money/Coins
@@ -81,13 +85,11 @@ import Foundation
 
 // MARK: Locomotive Color
 
-public typealias Livery = LocomotiveColor
-
-public enum LocomotiveColor: Int, CaseIterable, Equatable {
+public enum Livery: Int, CaseIterable, Equatable {
     case green = 1, red, yellow, blue
 }
 
-extension LocomotiveColor: CustomStringConvertible {
+extension Livery: CustomStringConvertible {
     public var description: String {
         switch self {
         case .green: return "Green"
@@ -103,13 +105,11 @@ extension LocomotiveColor: CustomStringConvertible {
 
 // MARK: Locomotive Generation
 
-public typealias Generation = LocomotiveGeneration
-
-public enum LocomotiveGeneration: Int, CaseIterable {
+public enum Generation: Int, CaseIterable {
     case first = 1, second, third, fourth, fifth
 }
 
-extension LocomotiveGeneration: CustomStringConvertible {
+extension Generation: CustomStringConvertible {
     public var description: String {
         switch self {
         case .first: return "First"
@@ -121,7 +121,7 @@ extension LocomotiveGeneration: CustomStringConvertible {
     }
 }
 
-extension LocomotiveGeneration: Equatable {
+extension Generation: Equatable {
     static func > (lhs: Generation, rhs: Generation) -> Bool {
         return (lhs.rawValue > rhs.rawValue)
     }
@@ -134,10 +134,6 @@ extension LocomotiveGeneration: Equatable {
 }
 
 // ------------------------------------
-
-public enum OrderState: Int, CaseIterable {
-    case empty, initialOrder, existingOrder, filledOrder, invalid
-}
 
 /**
 Game stages:
@@ -158,7 +154,7 @@ Game stages:
 
  5. Market Demands
  */
-public enum WerksGameStage: Int, CaseIterable {
+public enum GameStage: Int, CaseIterable {
     case idle
     case gameSetup
     case locomotiveDevelopment
@@ -166,85 +162,113 @@ public enum WerksGameStage: Int, CaseIterable {
     case produceAndSellLocomotives
     case payTaxes
     case marketDemands
+    case updateTurnOrder
     case gameOver
 }
 
-public protocol GameBoardSpace {
-    var position: Int { get }
-    var locomotiveID: Int { get }
-    var existingOrders: [Int] { get set }
-    var filledOrders: [Int] { get set }
-    var initialOrder: Int { get set }
-    var orderState: OrderState { get set }
-    var diceCap: Int { get }
+// ------------------------------------
+
+public class GameBoard: Equatable {
+    public var id: UUID
+    public var spaces: [Locomotive]
+    
+    init(spaces: [Locomotive]) {
+        self.id = UUID()
+        self.spaces = spaces
+    }
+    
+    public static func == (left: GameBoard, right: GameBoard) -> Bool {
+        return left.id == right.id
+    }
 }
 
+// ------------------------------------
+
+// MARK: Locomotive Data
+
+public enum LocomotiveStatus: Int, CaseIterable {
+    case inactive, new, rusting, obsolete
+}
+
+
 public protocol LocomotiveData {
-    var id: Int { get } // Unique ref of the locomotive
     var name: String { get } // Name of the locomotive
     var color: Livery { get } // Locomotive.color
     var generation: Generation { get } // Locomotive.generation
     var cost: Int { get } // Cost to design the locomotive
-    var trainPool: Int { get set } // How many of these locomotives exist
-    var maxDice: Int { get } // How many dice can be assigned to this
+    var productionCost: Int { get }
+    var income: Int { get }
+    var status: LocomotiveStatus { get }
 }
 
-// ------------------------------------
-
-// MARK: GameBoard
-
-// The game board is made up of 14 spaces
-public class GameBoard {
-    private let _spaces: [GameBoardSpace]
-    public var spaces: [GameBoardSpace] {
-        get {
-            return self._spaces
-        }
-    }
-    
-    init(_spaces: [GameBoardSpace]) {
-        self._spaces = _spaces
-    }
-}
-
-// ------------------------------------
-
-// MARK: Locomotive
-
-public class Locomotive: LocomotiveData, Identifiable, Hashable, Equatable {
-    public var id: Int
+public struct Train: LocomotiveData {
     public var name: String
+    public var cost: Int
     public var color: Livery
     public var generation: Generation
-    public var cost: Int
-    public var trainPool: Int
-    public var maxDice: Int
-    
-    init(id: Int, name: String, color: Livery, generation: Generation, cost: Int, trainPool: Int, maxDice: Int) {
-        self.id = id
-        self.name = name
-        self.color = color
-        self.generation = generation
-        self.cost = cost
-        self.trainPool = trainPool
-        self.maxDice = maxDice
+    public var productionCost: Int {
+        get {
+            return Int(round(Double(self.cost) / 2))
+        }
     }
+      
+    public var income: Int {
+      get {
+          return Int(round(Double(self.productionCost) / 2))
+      }
+    }
+    public var status: LocomotiveStatus // Set as inactive as default
+
     
-    public static func == (left: Locomotive, right: Locomotive) -> Bool {
+    
+    public static func makeTrains() {
+        let _ = [
+            Train.init(name: "Green.1", cost: 4, color: .green, generation: .first, status: .inactive)
+        ]
+    }
+}
+
+public struct Locomotive: Hashable, Equatable, Identifiable {
+    public var id: Int // Game board position
+    
+    public let existingOrders: [Int]
+    public let filledOrders: [Int]
+    public let initialOrder: Int // Set as -1 as default to show no orders defined
+    public let diceCapacity: Int // What the max dice the existingOrders, filledOrders can hold
+    public let trainPool: Int // How many cards to create for this space
+    
+        
+    public static func == (left: Locomotive, right: Locomotive) -> Bool  {
         return (left.id == right.id)
     }
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-        hasher.combine(color)
-        hasher.combine(generation)
     }
 }
+
+/*
+extension Locomotive {
+    public static func buildLocomotives() -> [Locomotive] {
+        let locos: [Locomotive] = [
+            Locomotive(id: 1, name: "Green.1", cost: 4, color: .green, generation: .first, existingOrders: [Int](), filledOrders: [Int](), initialOrder: -1, diceCapacity: 3, trainPool: <#T##Int#>, status: <#T##LocomotiveStatus#>)
+        ]
+        
+        return locos
+    }
+}
+*/
+
+// ------------------------------------
+
+
+/*
+
 
 // ------------------------------------
 
 extension Locomotive {
-    public func buildLocomotives() -> [Locomotive] {
+    public static func buildLocomotives() -> [Locomotive] {
         // An array of all locomotives in the game (immutable)
         
         let locos: [Locomotive] = [
@@ -269,3 +293,4 @@ extension Locomotive {
 }
 
 // ------------------------------------
+*/
