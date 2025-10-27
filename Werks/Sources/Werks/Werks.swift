@@ -93,102 +93,6 @@ import Foundation
 
 // ------------------------------------
 
-// MARK: Game Constants
-
-public enum GameConfig {
-    
-    public enum Player {
-        public static let minCount: Int = 3
-        public static let maxCount: Int = 5
-        
-        public static func isValid(count: Int) -> Bool {
-            (minCount...maxCount).contains(count)
-        }
-    }
-    
-    public enum Economy {
-        public static let endGameCoins: Int = 330
-        public static let startingCoins: [Int: Int] = [
-            3: 12,
-            4: 12,
-            5: 14
-        ]
-        
-        public static func startingCoins(for playerCount: Int) -> Int {
-            startingCoins[playerCount] ?? 0
-        }
-        
-        public static func isGameOver(coins: Int) -> Bool {
-            coins >= endGameCoins
-        }
-    }
-    
-    public enum Board {
-        public static let numberOfSpaces: Int = 14
-        public static let totalDiceCapacity: Int = 46
-    }
-
-    public enum Cards {        
-        public static let totals: [Livery: Int] = [
-            .green: 20,
-            .red: 13,
-            .yellow: 7,
-            .blue: 3
-        ]
-        
-        /// Computed total number of cards across all liveries
-        public static var total: Int {
-            totals.values.reduce(0, +)
-        }
-
-        /// Lookup helper for specific livery
-        public static func total(for livery: Livery) -> Int {
-           totals[livery] ?? 0
-        }
-
-        /// Expected breakdown for internal testing reference
-        public static let expectedBreakdown: [Livery: [GenerationExpectation]] = GameConfig.Testing.expectedGenerationsForLivery
-    }
-        
-    public enum Testing {
-        /// Expected card generations for each livery (used in internal and unit tests)
-        public static let expectedGenerationsForLivery: [Livery: [GenerationExpectation]] = [
-            .green:  [.init(generation: 1, count: 4),
-                      .init(generation: 2, count: 4),
-                      .init(generation: 3, count: 4),
-                      .init(generation: 4, count: 4),
-                      .init(generation: 5, count: 4)],
-            
-                .red:    [.init(generation: 1, count: 3),
-                          .init(generation: 2, count: 3),
-                          .init(generation: 3, count: 3),
-                          .init(generation: 4, count: 4)],
-            
-                .yellow: [.init(generation: 1, count: 2),
-                          .init(generation: 2, count: 2),
-                          .init(generation: 3, count: 3)],
-            
-                .blue:   [.init(generation: 1, count: 1),
-                          .init(generation: 2, count: 2)]
-        ]
-        
-        /// Convenience lookup
-        public static func count(for livery: Livery, generation: Int) -> Int? {
-            expectedGenerationsForLivery[livery]?.first { $0.generation == generation }?.count
-        }
-    }
-}
-
-/// Struct to model expectations more clearly
-public struct GenerationExpectation : Sendable {
-    public let generation: Int
-    public let count: Int
-}
-
-
-
-// ------------------------------------
-
 // MARK: Locomotive Color
 
 public enum Livery: Int, CaseIterable, Equatable, Sendable {
@@ -215,7 +119,6 @@ public enum Generation: Int, CaseIterable {
     case first = 1, second, third, fourth, fifth
 }
 
-// Needs: Ordinal Format and Roman Numeral Format
 extension Generation: CustomStringConvertible {
     public var description: String {
         switch self {
@@ -224,6 +127,14 @@ extension Generation: CustomStringConvertible {
         case .third: return "Third"
         case .fourth: return "Fourth"
         case .fifth: return "Fifth"
+        }
+    }
+    public var ordinalString: String {
+        switch self.rawValue {
+        case 1: return "1st"
+        case 2: return "2nd"
+        case 3: return "3rd"
+        default: return "\(rawValue)th"
         }
     }
 }
@@ -276,10 +187,16 @@ public enum GameStage: Int, CaseIterable {
 // ------------------------------------
 
 public class GameBoard {
-    public var spaces: [Int]
+    public var spaces: [Locomotive]
     
-    init(spaces: [Int]) {
+    private init(spaces: [Locomotive]) {
         self.spaces = spaces
+    }
+    
+    public static func createBoard() -> GameBoard {
+        let locos = Locomotive.makeTrains()
+        let gb = GameBoard.init(spaces: locos)
+        return gb
     }
 }
 
@@ -301,9 +218,9 @@ public protocol LocomotiveData {
 }
 
 // ie: General I, etc.
-public struct Train: LocomotiveData, Identifiable, Hashable, Equatable {
+public struct Locomotive: LocomotiveData, Identifiable, Hashable, Equatable {
     public var id: Int
-    //public var name: String
+    public var name: String
     public var color: Livery
     public var generation: Generation
     public var cost: Int
@@ -326,8 +243,9 @@ public struct Train: LocomotiveData, Identifiable, Hashable, Equatable {
       }
     }
         
-    init(id: Int, color: Livery, generation: Generation, cost: Int, existingOrders: [Int] = [Int](), filledOrders: [Int] = [Int](), initialOrders: Int = -1, diceCapacity: Int, status: LocomotiveStatus = .inactive) {
+    init(id: Int, name: String, color: Livery, generation: Generation, cost: Int, existingOrders: [Int] = [Int](), filledOrders: [Int] = [Int](), initialOrders: Int = -1, diceCapacity: Int, status: LocomotiveStatus = .inactive) {
         self.id = id
+        self.name = name
         self.color = color
         self.generation = generation
         self.cost = cost
@@ -339,28 +257,7 @@ public struct Train: LocomotiveData, Identifiable, Hashable, Equatable {
         self.status = status
     }
     
-    public var name: String {
-        get {
-            var trainName: String = ""
-            switch color {
-            case .green: trainName.append("General")
-            case .red: trainName.append("Fast Freight")
-            case .yellow: trainName.append("Heavy")
-            case .blue: trainName.append("Special")
-            }
-            trainName.append(" ")
-            switch generation {
-            case .first: trainName.append("I")
-            case .second: trainName.append("II")
-            case .third: trainName.append("III")
-            case .fourth: trainName.append("IV")
-            case .fifth: trainName.append("V")
-            }
-            return trainName
-        }
-    }
-    
-    public static func == (left: Train, right: Train) -> Bool  {
+    public static func == (left: Locomotive, right: Locomotive) -> Bool  {
         return (left.id == right.id)
     }
 
@@ -368,7 +265,7 @@ public struct Train: LocomotiveData, Identifiable, Hashable, Equatable {
         hasher.combine(id)
     }
     
-    public static func makeTrains() -> [Train] {
+    public static func makeTrains() -> [Locomotive] {
         /*
          1. Green: 1st Gen, Cost: $4, Production: 2, Income: 1, 3 dice boxes
          2. Red: 1st Gen, Cost: $8, Prod: 4, Income: 2, 3 dice boxes)
@@ -386,20 +283,20 @@ public struct Train: LocomotiveData, Identifiable, Hashable, Equatable {
          14, Green: 5th Gen, Cost: $56, Prod: 28, Income: 14, 5 dice boxes
          */
         let trains = [
-            Train(id: 1, color: .green, generation: .first, cost: 4, diceCapacity: 3),
-            Train(id: 2, color: .red, generation: .first, cost: 8, diceCapacity: 3),
-            Train(id: 3, color: .yellow, generation: .first, cost: 12, diceCapacity: 2),
-            Train(id: 4, color: .blue, generation: .first, cost: 16, diceCapacity: 1),
-            Train(id: 5, color: .green, generation: .second, cost: 20, diceCapacity: 4),
-            Train(id: 6, color: .red, generation: .second, cost: 24, diceCapacity: 3),
-            Train(id: 7, color: .yellow, generation: .second, cost: 28, diceCapacity: 3),
-            Train(id: 8, color: .green, generation: .third, cost: 32, diceCapacity: 4),
-            Train(id: 9, color: .blue, generation: .second, cost: 36, diceCapacity: 2),
-            Train(id: 10, color: .red, generation: .third, cost: 40, diceCapacity: 4),
-            Train(id: 11, color: .green, generation: .fourth, cost: 44, diceCapacity: 5),
-            Train(id: 12, color: .yellow, generation: .third, cost: 48, diceCapacity: 3),
-            Train(id: 13, color: .red, generation: .fourth, cost: 52, diceCapacity: 4),
-            Train(id: 14, color: .green, generation: .fifth, cost: 56, diceCapacity: 5)
+            Locomotive(id: 1, name: "", color: .green, generation: .first, cost: 4, diceCapacity: 3),
+            Locomotive(id: 2, name: "", color: .red, generation: .first, cost: 8, diceCapacity: 3),
+            Locomotive(id: 3, name: "", color: .yellow, generation: .first, cost: 12, diceCapacity: 2),
+            Locomotive(id: 4, name: "", color: .blue, generation: .first, cost: 16, diceCapacity: 1),
+            Locomotive(id: 5, name: "", color: .green, generation: .second, cost: 20, diceCapacity: 4),
+            Locomotive(id: 6, name: "", color: .red, generation: .second, cost: 24, diceCapacity: 3),
+            Locomotive(id: 7, name: "", color: .yellow, generation: .second, cost: 28, diceCapacity: 3),
+            Locomotive(id: 8, name: "", color: .green, generation: .third, cost: 32, diceCapacity: 4),
+            Locomotive(id: 9, name: "", color: .blue, generation: .second, cost: 36, diceCapacity: 2),
+            Locomotive(id: 10, name: "", color: .red, generation: .third, cost: 40, diceCapacity: 4),
+            Locomotive(id: 11, name: "", color: .green, generation: .fourth, cost: 44, diceCapacity: 5),
+            Locomotive(id: 12, name: "", color: .yellow, generation: .third, cost: 48, diceCapacity: 3),
+            Locomotive(id: 13, name: "", color: .red, generation: .fourth, cost: 52, diceCapacity: 4),
+            Locomotive(id: 14, name: "", color: .green, generation: .fifth, cost: 56, diceCapacity: 5)
         ]
         
         return trains
