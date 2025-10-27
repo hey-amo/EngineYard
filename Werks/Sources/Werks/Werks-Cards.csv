@@ -1,0 +1,44 @@
+ID,Name,Colour,Generation,Cost
+1,General I (4-2-1),Green,1,4
+2,General I (4-2-1),Green,1,4
+3,General I (4-2-1),Green,1,4
+4,General I (4-2-1),Green,1,4
+5,General II (20-10-5),Green,2,20
+6,General II (20-10-5),Green,2,20
+7,General II (20-10-5),Green,2,20
+8,General II (20-10-5),Green,2,20
+9,General III (32-16-8),Green,3,32
+10,General III (32-16-8),Green,3,32
+11,General III (32-16-8),Green,3,32
+12,General III (32-16-8),Green,3,32
+13,General IV (44-22-11),Green,4,44
+14,General IV (44-22-11),Green,4,44
+15,General IV (44-22-11),Green,4,44
+16,General IV (44-22-11),Green,4,44
+17,General V (56-28-14),Green,5,56
+18,General V (56-28-14),Green,5,56
+19,General V (56-28-14),Green,5,56
+20,General V (56-28-14),Green,5,56
+21,Fast Freight I (8-4-2),Red,1,8
+22,Fast Freight I (8-4-2),Red,1,8
+23,Fast Freight I (8-4-2),Red,1,8
+24,Fast Freight II (24-12-6),Red,2,24
+25,Fast Freight II (24-12-6),Red,2,24
+26,Fast Freight II (24-12-6),Red,2,24
+27,Fast Freight III (40-20-10),Red,3,40
+28,Fast Freight III (40-20-10),Red,3,40
+29,Fast Freight III (40-20-10),Red,3,40
+30,Fast Freight IV (52-26-13),Red,4,52
+31,Fast Freight IV (52-26-13),Red,4,52
+32,Fast Freight IV (52-26-13),Red,4,52
+33,Fast Freight IV (52-26-13),Red,4,52
+34,Heavy I (12-6-3),Yellow,1,12
+35,Heavy I (12-6-3),Yellow,1,12
+36,Heavy II (28-14-7),Yellow,2,28
+37,Heavy II (28-14-7),Yellow,2,28
+38,Heavy III (48-24-12),Yellow,3,48
+39,Heavy III (48-24-12),Yellow,3,48
+40,Heavy III (48-24-12),Yellow,3,48
+41,Special I (16-8-4),Blue,1,16
+42,Special II (36-18-9),Blue,2,36
+43,Special II (36-18-9),Blue,2,36
