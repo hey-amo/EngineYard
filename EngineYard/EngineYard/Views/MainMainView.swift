@@ -9,7 +9,17 @@ import SwiftUI
 
 struct MainMainView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Engine Yard")
+                .font(.largeTitle)
+            
+            Button("Start Game") {
+                // Add game start logic here
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+        .navigationTitle("New Game")
     }
 }
 
