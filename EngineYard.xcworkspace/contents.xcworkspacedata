@@ -4,4 +4,54 @@
    <FileRef
       location = "group:Werks">
    </FileRef>
+   <Group
+      location = "group:EngineYard"
+      name = "EngineYard">
+      <FileRef
+         location = "group:EngineYard.xcodeproj">
+      </FileRef>
+      <Group
+         location = "group:EngineYard"
+         name = "EngineYard">
+         <FileRef
+            location = "group:EngineYardApp.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Item.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Assets.xcassets">
+         </FileRef>
+         <Group
+            location = "group:Preview Content"
+            name = "Preview Content">
+            <FileRef
+               location = "group:Preview Assets.xcassets">
+            </FileRef>
+         </Group>
+         <FileRef
+            location = "group:EngineYard.entitlements">
+         </FileRef>
+         <FileRef
+            location = "group:ContentView.swift">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:EngineYardUITests"
+         name = "EngineYardUITests">
+         <FileRef
+            location = "group:EngineYardUITestsLaunchTests.swift">
+         </FileRef>
+         <FileRef
+            location = "group:EngineYardUITests.swift">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:EngineYardTests"
+         name = "EngineYardTests">
+         <FileRef
+            location = "group:EngineYardTests.swift">
+         </FileRef>
+      </Group>
+   </Group>
 </Workspace>

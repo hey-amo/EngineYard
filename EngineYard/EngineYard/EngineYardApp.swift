@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct EngineYardApp: App {
+    /*
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -22,11 +23,11 @@ struct EngineYardApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+     */
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainMainView()
         }
-        .modelContainer(sharedModelContainer)
+        //.modelContainer(sharedModelContainer)
     }
 }
