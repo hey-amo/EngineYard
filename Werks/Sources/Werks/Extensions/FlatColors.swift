@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 //  @source : https://github.com/0x73/SDevFlatColors/blob/master/Classes/SDevFlatColors.swift
@@ -257,3 +258,4 @@ public extension UIColor {
         return selected.convertToUIColor()
     }
 }
+#endif

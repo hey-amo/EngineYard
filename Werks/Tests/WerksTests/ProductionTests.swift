@@ -10,9 +10,7 @@ import Testing
 @testable import Werks
 
 // Production errors
-public enum ProductionError: Error {
-    case invalidAmount(value: Int)
-}
+public typealias ProductionError = ValidationError
 
 final public class ProductionManager {
     public func add(units: Int, to delegate: ProductionDelegate) {

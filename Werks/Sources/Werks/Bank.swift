@@ -21,25 +21,7 @@ public protocol Banking {
 }
 
 // Custom errors for bank operations
-public enum BankError: Error {
-    case insufficentFunds
-    case invalidAmount(value: Int)
-    case notEnoughCoins(required: Int, available: Int)
-}
-
-extension BankError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .insufficentFunds:
-            return "Not enough funds"
-        case .invalidAmount(let value):
-            return "Value cannot be negative (got \(value))."
-        case .notEnoughCoins(let required, let available):
-            return "Not enough coins: required \(required), available \(available)."
-        }
-    }
-}
-
+public typealias BankError = ValidationError
 
 // Concrete implementation
 final public class Bank: Banking {
@@ -71,6 +53,7 @@ final public class Bank: Banking {
     
     public func canCredit(_ amount: Int) throws -> Bool {
         guard amount > 0 else {
+            //throw BankError.invalidAmount(value: amount)
             throw BankError.invalidAmount(value: amount)
         }
         return true
@@ -84,7 +67,7 @@ final public class Bank: Banking {
         let sum = (account.balance - amount)
         
         guard sum >= 0 else {
-            throw BankError.insufficentFunds
+            throw BankError.insufficientFunds
         }
         
         return true
