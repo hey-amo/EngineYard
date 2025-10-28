@@ -304,4 +304,33 @@ public struct Locomotive: LocomotiveData, Identifiable, Hashable, Equatable {
 }
 
 
-
+public class LocomotiveCard: Identifiable, Hashable, Equatable, ProductionDelegate {
+    public private(set) var id: UUID
+    public var locomotive: Locomotive?
+    public var productionUnits: Int
+    public var productionUnitsSpent: Int
+    
+    deinit {
+        self.locomotive = nil
+    }
+    
+    init(id: UUID, locomotive: Locomotive, units: Int, spentUnits: Int) {
+        self.id = id
+        self.locomotive = locomotive
+        self.productionUnits = units
+        self.productionUnitsSpent = spentUnits
+    }
+        
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    public static func == (left: LocomotiveCard, right: LocomotiveCard) -> Bool {
+        return (left.id == right.id)
+    }
+    
+    public func updateProduction(units: Int, spentUnits: Int) {
+        self.productionUnits = units
+        self.productionUnitsSpent = spentUnits
+    }
+}

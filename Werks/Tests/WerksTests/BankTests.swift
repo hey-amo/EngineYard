@@ -9,6 +9,18 @@ import Testing
 
 @testable import Werks
 
+fileprivate class Account: Bankable {
+    public var balance: Int
+
+    init(initialBalance: Int) {
+        self.balance = initialBalance
+    }
+
+    public func updateBalance(_ amount: Int) {
+        self.balance += amount
+    }
+}
+
 struct BankTests {
 
     // Test: Credit a negative value should throw

@@ -40,17 +40,6 @@ extension BankError: LocalizedError {
     }
 }
 
-public class Account: Bankable {
-    public var balance: Int
-
-    init(initialBalance: Int) {
-        self.balance = initialBalance
-    }
-
-    public func updateBalance(_ amount: Int) {
-        self.balance += amount
-    }
-}
 
 // Concrete implementation
 final public class Bank: Banking {
