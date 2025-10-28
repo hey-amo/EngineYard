@@ -1,15 +1,7 @@
-//
-//  GameConfig.swift
-//  Werks
-//
-//  Created by Amarjit on 27/10/2025.
-//
 
-import Foundation
+// MARK: Game Rules
 
-// MARK: Game Constants
-
-public enum GameConfig {
+public enum GameRules {
     
     public enum Player {
         public static let minCount: Int = 3
@@ -21,6 +13,7 @@ public enum GameConfig {
     }
     
     public enum Economy {
+        public static let taxRate: Double = 0.10
         public static let endGameCoins: Int = 330
         public static let startingCoins: [Int: Int] = [
             3: 12,
@@ -61,7 +54,7 @@ public enum GameConfig {
         }
 
         /// Expected breakdown for internal testing reference
-        public static let expectedBreakdown: [Livery: [GenerationExpectation]] = GameConfig.Testing.expectedGenerationsForLivery
+        public static let expectedBreakdown: [Livery: [GenerationExpectation]] = GameRules.Testing.expectedGenerationsForLivery
     }
         
     public enum Testing {

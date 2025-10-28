@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4D16DB6E2EB1418700EECD61 /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D16DB6D2EB1418700EECD61 /* Werks */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4D75C13B2EB0E91400DA4092 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D16DB6E2EB1418700EECD61 /* Werks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +77,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D16DB6C2EB1418700EECD61 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4D75C11E2EB0E91200DA4092 = {
 			isa = PBXGroup;
 			children = (
 				4D75C1292EB0E91200DA4092 /* EngineYard */,
 				4D75C13D2EB0E91400DA4092 /* EngineYardTests */,
 				4D75C1472EB0E91400DA4092 /* EngineYardUITests */,
+				4D16DB6C2EB1418700EECD61 /* Frameworks */,
 				4D75C1282EB0E91200DA4092 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,6 +125,7 @@
 			);
 			name = EngineYard;
 			packageProductDependencies = (
+				4D16DB6D2EB1418700EECD61 /* Werks */,
 			);
 			productName = EngineYard;
 			productReference = 4D75C1272EB0E91200DA4092 /* EngineYard.app */;
@@ -410,7 +424,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -452,7 +466,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -607,6 +621,13 @@
 			relativePath = ../Werks;
 		};
 /* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D16DB6D2EB1418700EECD61 /* Werks */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Werks;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4D75C11F2EB0E91200DA4092 /* Project object */;
 }

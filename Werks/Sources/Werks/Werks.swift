@@ -84,105 +84,12 @@
  | 12 | Heavy III (48-24-12)       | Yellow | 48 | 3 | 3 | 3 | 3 |
  | 13 | Fast Freight IV (52-26-13) | Red    | 52 | 2 | 4 | 4 | 4 |
  | 14 | General V (56-28-14)       | Green  | 56 | 1 | 5 | 4 | 5 |
-
- 
  ------------------------------------
  */
 
 import Foundation
 
-// ------------------------------------
-
-// MARK: Locomotive Color
-
-public enum Livery: Int, CaseIterable, Equatable, Sendable {
-    case green = 1, red, yellow, blue
-}
-
-extension Livery: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .green: return "Green"
-        case .red: return "Red"
-        case .yellow: return "Yellow"
-        case .blue: return "Blue"
-        }
-    }
-}
-
-
-// ------------------------------------
-
-// MARK: Locomotive Generation
-
-public enum Generation: Int, CaseIterable {
-    case first = 1, second, third, fourth, fifth
-}
-
-extension Generation: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .first: return "First"
-        case .second: return "Second"
-        case .third: return "Third"
-        case .fourth: return "Fourth"
-        case .fifth: return "Fifth"
-        }
-    }
-    public var ordinalString: String {
-        switch self.rawValue {
-        case 1: return "1st"
-        case 2: return "2nd"
-        case 3: return "3rd"
-        default: return "\(rawValue)th"
-        }
-    }
-}
-
-extension Generation: Equatable {
-    static func > (lhs: Generation, rhs: Generation) -> Bool {
-        return (lhs.rawValue > rhs.rawValue)
-    }
-    static func < (lhs: Generation, rhs: Generation) -> Bool {
-        return (lhs.rawValue < rhs.rawValue)
-    }
-    public static func == (lhs: Generation, rhs: Generation) -> Bool {
-        return (lhs.rawValue == rhs.rawValue)
-    }
-}
-
-// ------------------------------------
-
 /**
-Game stages:
- 
- 1. Locomotive Development
- Each player may develop 1 new locomotive.
- 
- 2. Production Capacity
- Each player may expand his production capacities.
- 
- 3. Locomotive Production
- Each player may produce and sell locomotives.
- 
- 4. Pay Taxes
- Each player must pay taxes.
- If at least one player has 300 coins or more after paying taxes, then the game ends; otherwise determine the new Player
- Order.
-
- 5. Market Demands
- */
-public enum GameStage: Int, CaseIterable {
-    case idle
-    case gameSetup
-    case locomotiveDevelopment
-    case expandProductionCapacity
-    case produceAndSellLocomotives
-    case payTaxes
-    case marketDemands
-    case updateTurnOrder
-    case gameOver
-}
 
 // ------------------------------------
 
@@ -303,34 +210,4 @@ public struct Locomotive: LocomotiveData, Identifiable, Hashable, Equatable {
     }
 }
 
-
-public class LocomotiveCard: Identifiable, Hashable, Equatable, ProductionDelegate {
-    public private(set) var id: UUID
-    public var locomotive: Locomotive?
-    public var units: Int
-    public var spentUnits: Int
-    
-    deinit {
-        self.locomotive = nil
-    }
-    
-    init(id: UUID, locomotive: Locomotive, units: Int, spentUnits: Int) {
-        self.id = id
-        self.locomotive = locomotive
-        self.units = units
-        self.spentUnits = spentUnits
-    }
-        
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
-    public static func == (left: LocomotiveCard, right: LocomotiveCard) -> Bool {
-        return (left.id == right.id)
-    }
-    
-    public func updateProduction(units: Int, spentUnits: Int) {
-        self.units = units
-        self.spentUnits = spentUnits
-    }
-}
+**/

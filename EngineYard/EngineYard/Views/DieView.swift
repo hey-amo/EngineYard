@@ -12,10 +12,9 @@ import SwiftUI
 struct DieView: View {
     let die: Int
     var body: some View {
-//        Image("die-\(die)")
-Image("die-\(die)", bundle: .module)
-    .resizable()
-    .aspectRatio(contentMode: .fit)
+        Image(WerksResources.dieImage(die), bundle: WerksResources.bundle)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
     }
 }
 
