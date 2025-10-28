@@ -307,8 +307,8 @@ public struct Locomotive: LocomotiveData, Identifiable, Hashable, Equatable {
 public class LocomotiveCard: Identifiable, Hashable, Equatable, ProductionDelegate {
     public private(set) var id: UUID
     public var locomotive: Locomotive?
-    public var productionUnits: Int
-    public var productionUnitsSpent: Int
+    public var units: Int
+    public var spentUnits: Int
     
     deinit {
         self.locomotive = nil
@@ -317,8 +317,8 @@ public class LocomotiveCard: Identifiable, Hashable, Equatable, ProductionDelega
     init(id: UUID, locomotive: Locomotive, units: Int, spentUnits: Int) {
         self.id = id
         self.locomotive = locomotive
-        self.productionUnits = units
-        self.productionUnitsSpent = spentUnits
+        self.units = units
+        self.spentUnits = spentUnits
     }
         
     public func hash(into hasher: inout Hasher) {
@@ -330,7 +330,7 @@ public class LocomotiveCard: Identifiable, Hashable, Equatable, ProductionDelega
     }
     
     public func updateProduction(units: Int, spentUnits: Int) {
-        self.productionUnits = units
-        self.productionUnitsSpent = spentUnits
+        self.units = units
+        self.spentUnits = spentUnits
     }
 }
