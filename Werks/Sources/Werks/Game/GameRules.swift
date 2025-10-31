@@ -1,5 +1,5 @@
 
-// MARK: Game Rules
+// MARK: Game Rules & Constants
 
 public enum GameRules {
     
