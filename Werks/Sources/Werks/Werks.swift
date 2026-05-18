@@ -1,6 +1,10 @@
 // Werks
 // v0.1a
 
+// MARK: Main game area
+public class Werks {
+}
+
 // MARK: Game Rules
 public enum GameRules {
     public enum Player {
