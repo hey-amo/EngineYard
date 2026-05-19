@@ -16,11 +16,11 @@ public protocol ModifyD6 {
 public struct D6 {
     public static let minValue: Int = 1
     public static  let maxValue: Int = 6
-    private let die: GKRandomDistribution
+    private let seed: GKRandomDistribution
     
     public static func roll() -> Int {
-        let die: GKRandomDistribution = GKRandomDistribution.d6()
-        return die.nextInt()
+        let seed: GKRandomDistribution = GKRandomDistribution.d6()
+        return seed.nextInt()
     }
 }
 
