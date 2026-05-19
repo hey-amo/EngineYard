@@ -17,5 +17,10 @@ public enum GameStage: Int, CaseIterable, Codable {
 
 // MARK: Main game area
 public class Werks {
+    public var gameStage: GameStage = .idle
+    
+    init(gameStage: GameStage) {
+        self.gameStage = gameStage
+    }
 }
 
