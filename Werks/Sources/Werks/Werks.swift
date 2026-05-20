@@ -18,9 +18,11 @@ public enum GameStage: Int, CaseIterable, Codable {
 // MARK: Main game area
 public class Werks {
     public var gameStage: GameStage = .idle
+    public var gameBoard: [Locomotive]
     
-    init(gameStage: GameStage) {
+    init(gameStage: GameStage, gameBoard: [Locomotive] = [Locomotive]()) {
         self.gameStage = gameStage
+        self.gameBoard = gameBoard
     }
 }
 
