@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Locomotive: Hashable, Equatable, Codable {
-    public let id: UUID
+    public let id: Int
     public let generation: Generation
     public let colour: LocomotiveColor
     public let cost: Int
@@ -19,9 +19,15 @@ public struct Locomotive: Hashable, Equatable, Codable {
         return Int(productionCost / 2)
     }
     public let trainPool: Int
+    public let dicePool: Int
     
     static public func == (lhs: Locomotive, rhs:Locomotive) -> Bool {
         return (lhs.id == rhs.id)
+    }
+    
+    // Hashable conformance
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
@@ -75,6 +81,18 @@ extension LocomotiveColor: CustomStringConvertible {
         case .yellow: return "Yellow"
         case .blue: return "Blue"
         }
+    }
+}
+
+extension Locomotive {
+    public static func buildTrains() -> [Locomotive] {
+        let locos: [Locomotive] = [
+            Locomotive(id: 1, generation: .first, colour: .green, cost: 4, trainPool: 4, dicePool: 3),
+            Locomotive(id: 2, generation: .first, colour: .red, cost: 8, trainPool: 3, dicePool: 3),
+            Locomotive(id: 3, generation: .first, colour: .yellow, cost: 12, trainPool: 2, dicePool: 2),
+        ]
+        
+        return locos
     }
 }
 

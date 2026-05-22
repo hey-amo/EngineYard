@@ -6,7 +6,7 @@
 /**
  # 🚂  Werks
  - 3 to 5 players
- - Most money wins
+ - Most money wins after round where one player has 330 coins
  
  # Components:
  - 1 game board
@@ -68,7 +68,7 @@
 
  ---
  
- # 🚂 Train Unit Data Table
+ # 🚂 Trains
 
  | **ID** | **Name** | **Colour** | **Cost** | **Colour Code** | **Gen** | **Pool** | **Dice** |
  |:------:|:----------------------------|:-----------|:--------:|:----------------:|:-------:|:--------:|:--------:|
