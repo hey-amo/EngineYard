@@ -84,12 +84,47 @@ extension LocomotiveColor: CustomStringConvertible {
     }
 }
 
+
+/*
+ # 🚂 Trains
+
+ | **ID** | **Name** | **Colour** | **Cost** | **Colour Int** | **Generation** | **Pool** | **Dice** |
+ |:------:|:----------------------------|:-----------|:--------:|:----------------:|:-------:|:--------:|:--------:|
+ | 1  | General I (4-2-1)          | Green  | 4  | 1 | 1 | 4 | 3 |
+ | 2  | Fast Freight I (8-4-2)     | Red    | 8  | 2 | 1 | 3 | 3 |
+ | 3  | Heavy I (12-6-3)           | Yellow | 12 | 3 | 1 | 2 | 2 |
+ | 4  | Special I (16-8-4)         | Blue   | 16 | 4 | 1 | 1 | 2 |
+ | 5  | General II (20-10-5)       | Green  | 20 | 1 | 2 | 4 | 4 |
+ | 6  | Fast Freight II (24-12-6)  | Red    | 24 | 2 | 2 | 3 | 3 |
+ | 7  | Heavy II (28-14-7)         | Yellow | 28 | 3 | 2 | 2 | 3 |
+ | 8  | General III (32-16-8)      | Green  | 32 | 1 | 3 | 4 | 4 |
+ | 9  | Special II (36-18-9)       | Blue   | 36 | 4 | 2 | 2 | 2 |
+ | 10 | Fast Freight III (40-20-10)| Red    | 40 | 2 | 3 | 3 | 4 |
+ | 11 | General IV (44-22-11)      | Green  | 44 | 1 | 4 | 4 | 4 |
+ | 12 | Heavy III (48-24-12)       | Yellow | 48 | 3 | 3 | 3 | 3 |
+ | 13 | Fast Freight IV (52-26-13) | Red    | 52 | 2 | 4 | 4 | 4 |
+ | 14 | General V (56-28-14)       | Green  | 56 | 1 | 5 | 4 | 5 |
+ ------------------------------------
+ */
+
+
 extension Locomotive {
     public static func buildTrains() -> [Locomotive] {
         let locos: [Locomotive] = [
             Locomotive(id: 1, generation: .first, colour: .green, cost: 4, trainPool: 4, dicePool: 3),
             Locomotive(id: 2, generation: .first, colour: .red, cost: 8, trainPool: 3, dicePool: 3),
             Locomotive(id: 3, generation: .first, colour: .yellow, cost: 12, trainPool: 2, dicePool: 2),
+            Locomotive(id: 4, generation: .first, colour: .blue, cost: 16, trainPool: 1, dicePool: 2),
+            Locomotive(id: 5, generation: .second, colour: .green, cost: 20, trainPool: 4, dicePool: 4),
+            Locomotive(id: 6, generation: .second, colour: .red, cost: 24, trainPool: 3, dicePool: 3),
+            Locomotive(id: 7, generation: .second, colour: .yellow, cost: 28, trainPool: 2, dicePool: 3),
+            Locomotive(id: 8, generation: .third, colour: .green, cost: 32, trainPool: 4, dicePool: 4),
+            Locomotive(id: 9, generation: .second, colour: .blue, cost: 36, trainPool: 2, dicePool: 2),
+            Locomotive(id: 10, generation: .third, colour: .red, cost: 40, trainPool: 3, dicePool: 4),
+            Locomotive(id: 11, generation: .fourth, colour: .green, cost: 44, trainPool: 4, dicePool: 4),
+            Locomotive(id: 12, generation: .third, colour: .yellow, cost: 48, trainPool: 3, dicePool: 3),
+            Locomotive(id: 13, generation: .fourth, colour: .red, cost: 52, trainPool: 4, dicePool: 4),
+            Locomotive(id: 14, generation: .fifth, colour: .green, cost: 56, trainPool: 4, dicePool: 5),
         ]
         
         return locos
