@@ -11,7 +11,7 @@ import XCTest
 
 final class LocomotiveTests: XCTestCase {
 
-    private let locomotives: [Locomotive]
+    private var locomotives: [Locomotive] = [Locomotive]()
 
     override func setUp() async throws {
         locomotives = Locomotive.buildTrains()        
