@@ -1,20 +1,28 @@
 You are an expert Swift developer with a decade's worth of experience in Swift development, and write clean, modular, and production-quality code that aligns with Apple’s best practices as per the following hyperlinks:
 
-- https://developer.apple.com/documentation
-- https://developer.apple.com/design/human-interface-guidelines/
+@docs: https://developer.apple.com/documentation
+@docs: https://developer.apple.com/design/human-interface-guidelines/
+@visual design: The visual style will use Google Material design where possible
 
-You will help me program a board game using Swift, SwiftUI
+You will help me program a simple to play board game using Swift, SwiftUI in Modern iOS
+
+for targets:
+
+- iOS, iPad, Mac, AppleTV
+- Phase 1: (This project: deliver working iOS app project)
 
 Ensure that:
 * Code uses SOLID principles wherever possible.
 * You provide comments to explain each part of the architecture.
 * The code is concise, avoiding unnecessary complexity.
 * Do not include unit tests in the code unless prompted.
+* Use Swift package to decouple the main app from the game engine.
+* The game will have a menu system, navigation
 
 --
 
 This is a board game called "locomotive werks". 
-This game will be written using Swift.
+This game will be written using Swift
 
 # Locomotive Werks Overview
  
@@ -49,7 +57,7 @@ This game will be written using Swift.
     - 3 Special locomotives (blue)
         - 1 First Generation, 2 Second Generation)
  - 5 Turn order cards (1-5)
- - 80 Production counters (Value: 1 or 2)
+ - 80 Production counters (Fixed value of 1 or 2)
  - Money/Coins
  
 --
@@ -57,44 +65,51 @@ This game will be written using Swift.
 ## Objective of the game
 
  Players assume the role of engineers, constructing and producing more and more advanced locomotives.
- By selling the locomotives, the players try to gain as much profit as possible.
+ By selling the locomotives, the players try to gain as much money as possible.
  
- When the game ends the player with the most money wins.
+ When the game ends when 1 or more players has more than 330 coins.
  
- Werks is played in rounds.
+ The winner of the game is the player with the most coins.
+ 
+ Werks is played over a number of rounds.
  
  Each round consists of the following phases; in each phase players perform their turn in Player Order:
  
  1. Locomotive Development
- Each player may develop 1 new locomotive.
+ Each player, in turn order, may develop 1 new locomotive.
  
  2. Production Capacity
- Each player may expand his production capacities.
+ Each player, in turn order, may expand his production capacities.
  
- 3. Locomotive Production
- Each player may produce and sell locomotives.
+ 3. Locomotive Sales
+ Each player, in turn order, sells locomotive (they sell production units)
  
  4. Pay Taxes
- Each player must pay taxes.
- If at least one player has 300 coins or more after paying taxes, then the game ends; otherwise determine the new Player
- Order.
+ All players must pay taxes.
+ 
+ If at least one player has 330 coins, then the game ends (SEE GAME END); otherwise determine the new Player Order.
  
  5. Market Demands
  Players determine Market Demands. Subsequently the next game round starts.
+
+# GAME END
+
+Game ends when 1 player has 330 coins.
+Player with the most cash wins
 
 --
 
 # Game in detail
 
-- The game board is made up of 14 `spaces` in linear sequential order. This order never changes
+- The game board is made up of 14 `spaces` in linear sequential order. This order never changes.
 - The game has 43 cards. These cards are never modified.
 - The game has 3-5 players.
 - Each player can hold 0 to many cards in their hand.
 
-The Werks-board.csv file lists all 14 locomotives in the game.
-The Werks-cards.csv file lists all 43 cards in the game.
+The `Werks-board.csv` file lists all 14 locomotives in the game.
+The `Werks-cards.csv` file lists all 43 cards in the game.
 
-Each space on the game board has the following information:
+Each game `space` on the game `board` has the following information:
 
 - Name (string), 
 - Color,
@@ -105,13 +120,15 @@ Each space on the game board has the following information:
 - Existing orders (An array of D6: Integer), 
 - Filled orders (An array of D6: Integer), 
 - Initial orders (Integer. This may be -1; if so; that means that no initial orders have been defined and is considered is null/empty).
+- Rust: Enum: Int { unavailable, active, rusting, obsolete }
 
 --
 
 Understanding board.csv
 
-- Where pool, this is how many exists of that locomotive, and its also used to say how many cards there are.
-- Where max dice refers to the maximum amount of dice that existing orders and filled orders total (ie: existing orders + filled orders can never exceed this number)
+- Where `pool`, this is how many copies of that specific locomotive exists
+- Where `max dice` refers to the maximum amount of dice that existing orders and filled orders total (ie: existing orders + filled orders can never exceed this number)
+- DicePool means = max dice.
 
 --
 
@@ -121,21 +138,20 @@ The `game board` is a collection of `spaces` in a linear sequence
 
 Where each space is a `locomotive`:
 
-## Locomotive
+## Locomotive data
 
-1. LocomotiveID: Int
-2. LocomotiveName: String
-3. Color: Color: Int
-4. Generation: Generation: Int
-5. Cost: Cost: Int
-6. Production Cost: ProductionCost: Int
-7. Income: Income: Int
-8. Pool: Int
-9. MaxDice: Int
+1. LocomotiveID: Int *immutable*
+2. LocomotiveName: String  *immutable*
+3. Color: Color: Int  *immutable*
+4. Generation: Generation: Int  *immutable*
+5. Cost: Cost: Int  *immutable*
+6. Production Cost: ProductionCost: Int *Always cost / 2 - rounded up*
+7. Income: Income: Int  *Always productionCost / 2 - rounded up*
+8. DicePool: Int 
 10. InitialOrders: Int
 11. ExistingOrders: Array: Int
 12. FilledOrders: Array: Int
-13. Status: Enum: Int { unavailable, active, rusting, obsolete }
+13. Rust: Enum: Int { unavailable, active, rusting, obsolete }
 
 --
 
@@ -149,16 +165,14 @@ There are 43 `locomotive cards` (see: Components)
 
 Locomotive card has the following information:
 
-- Locomotive Name
-- Locomotive Color
-- Locomotive Generation
-- Locomotive Cost
-- Locomotive Production Cost
-- Locomotive Income
-
-You will notice that this shares information from the `Locomotive`.
+- Locomotive ID // reference to a specific locomotive
+- Locomotive Production Units (units)
+- Locomotive Production Units Spent (unitsSpent)
 
 A player can only ever have a maximum 1 of each `locomotive card`.
+
+IE: Player can only have `1 Green.First` locomotive card.
+When locomotives are marked as `obsolete`, the card cannot be purchased. 
 
 --
 
@@ -169,11 +183,25 @@ Players have:
 - Name (String)
 - Avatar (String)
 - Coins (Int)
-- Locomotive Cards (Array: Locomotive Cards)
+- Hand, A Portfolio  of Locomotive Cards (Array: Locomotive Cards)
 - Status (Enum: Idle, OnTurn)
 - isAI (Bool)
 - isOnTurn (Bool)
 
 --
 
+# Expected game screens
 
+MainMenu
+PlayerSelectScreen
+Phase1_BuyLocomotiveScreen
+Phase2_BuyLocomotiveProductionScreen
+Phase3_SellLocomotivesScreen
+Phase4_PayTaxesScreen
+Phase5_MarketDemandsScreen
+MessageLog
+Winner_Screen
+Generic_MessageScreen
+PauseMenuScreen
+GameSettingsScreen
+TutorialOverlayScreens (Carousel style)

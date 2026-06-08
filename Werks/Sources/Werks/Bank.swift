@@ -15,13 +15,17 @@ public class Bank {
         return amount
     }
     
+    // credit coins to a given player?
     public func credit(_ amount: Int = 0) -> Int {
         return 0
     }
     
+    // debit coins from a given player?
     public func debit(_ amount: Int = 0) -> Int {
         return 0
     }
+    
+    // MARK: Private functions
     
     private func canCredit(_ amount: Int = 0) -> Bool {
        // use try-catch to use the numberValidator to check amount is valid, throw if error

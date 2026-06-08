@@ -8,15 +8,21 @@
 import Foundation
 import GameplayKit
 
+// A list of all turn states
+public enum PlayerTurnState: Int, CaseIterable, Codable {
+    case idle, onTurn, thinking, takingTurn
+}
+
 public class Player: NSObject, GKGameModelPlayer {
     public var playerId: Int
     public var avatar: String
     public var cash: Int
+    public var isAI: Bool
     
-    
-    init(playerId: Int, avatar: String, cash: Int = 0) {
+    init(playerId: Int, avatar: String, cash: Int = 0, isAI: Bool = false) {
         self.playerId = playerId
         self.avatar = avatar
         self.cash = cash
+        self.isAI = isAI
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 
 // Locomotives can be in different states of rust
 public enum Rust: Int, CaseIterable, Codable {
-    case new = 0, ageing, rusted
+    case unavailable = -1, new = 1, ageing = 2, obsolete = 3
 }
 
 // Locomotive struct
@@ -116,20 +116,20 @@ extension Locomotive {
     /// Build 14 trains
     public static func buildTrains() -> [Locomotive] {
         let locos: [Locomotive] = [
-            Locomotive(id: 1, name: "General I", generation: .first, colour: .green, cost: 4, trainPool: 4, dicePool: 3, rust: .new),
-            Locomotive(id: 2, name: "Fast Freight I", generation: .first, colour: .red, cost: 8, trainPool: 3, dicePool: 3, rust: .new),
-            Locomotive(id: 3, name: "Heavy I", generation: .first, colour: .yellow, cost: 12, trainPool: 2, dicePool: 2, rust: .new),
-            Locomotive(id: 4, name: "Special I", generation: .first, colour: .blue, cost: 16, trainPool: 1, dicePool: 2, rust: .new),
-            Locomotive(id: 5, name: "General II", generation: .second, colour: .green, cost: 20, trainPool: 4, dicePool: 4, rust: .new),
-            Locomotive(id: 6, name: "Fast Freight II", generation: .second, colour: .red, cost: 24, trainPool: 3, dicePool: 3, rust: .new),
-            Locomotive(id: 7, name: "Heavy II", generation: .second, colour: .yellow, cost: 28, trainPool: 2, dicePool: 3, rust: .new),
-            Locomotive(id: 8, name: "General III", generation: .third, colour: .green, cost: 32, trainPool: 4, dicePool: 4, rust: .new),
-            Locomotive(id: 9, name: "Special II", generation: .second, colour: .blue, cost: 36, trainPool: 2, dicePool: 2, rust: .new),
-            Locomotive(id: 10, name: "Fast Freight III", generation: .third, colour: .red, cost: 40, trainPool: 3, dicePool: 4, rust: .new),
-            Locomotive(id: 11, name: "General IV", generation: .fourth, colour: .green, cost: 44, trainPool: 4, dicePool: 4, rust: .new),
-            Locomotive(id: 12, name: "Heavy III", generation: .third, colour: .yellow, cost: 48, trainPool: 3, dicePool: 3, rust: .new),
-            Locomotive(id: 13, name: "Fast Freight IV", generation: .fourth, colour: .red, cost: 52, trainPool: 4, dicePool: 4, rust: .new),
-            Locomotive(id: 14, name: "General V", generation: .fifth, colour: .green, cost: 56, trainPool: 4, dicePool: 5, rust: .new),
+            Locomotive(id: 1, name: "General I", generation: .first, colour: .green, cost: 4, trainPool: 4, dicePool: 3, rust: .unavailable),
+            Locomotive(id: 2, name: "Fast Freight I", generation: .first, colour: .red, cost: 8, trainPool: 3, dicePool: 3, rust: .unavailable),
+            Locomotive(id: 3, name: "Heavy I", generation: .first, colour: .yellow, cost: 12, trainPool: 2, dicePool: 2, rust: .unavailable),
+            Locomotive(id: 4, name: "Special I", generation: .first, colour: .blue, cost: 16, trainPool: 1, dicePool: 2, rust: .unavailable),
+            Locomotive(id: 5, name: "General II", generation: .second, colour: .green, cost: 20, trainPool: 4, dicePool: 4, rust: .unavailable),
+            Locomotive(id: 6, name: "Fast Freight II", generation: .second, colour: .red, cost: 24, trainPool: 3, dicePool: 3, rust: .unavailable),
+            Locomotive(id: 7, name: "Heavy II", generation: .second, colour: .yellow, cost: 28, trainPool: 2, dicePool: 3, rust: .unavailable),
+            Locomotive(id: 8, name: "General III", generation: .third, colour: .green, cost: 32, trainPool: 4, dicePool: 4, rust: .unavailable),
+            Locomotive(id: 9, name: "Special II", generation: .second, colour: .blue, cost: 36, trainPool: 2, dicePool: 2, rust: .unavailable),
+            Locomotive(id: 10, name: "Fast Freight III", generation: .third, colour: .red, cost: 40, trainPool: 3, dicePool: 4, rust: .unavailable),
+            Locomotive(id: 11, name: "General IV", generation: .fourth, colour: .green, cost: 44, trainPool: 4, dicePool: 4, rust: .unavailable),
+            Locomotive(id: 12, name: "Heavy III", generation: .third, colour: .yellow, cost: 48, trainPool: 3, dicePool: 3, rust: .unavailable),
+            Locomotive(id: 13, name: "Fast Freight IV", generation: .fourth, colour: .red, cost: 52, trainPool: 4, dicePool: 4, rust: .unavailable),
+            Locomotive(id: 14, name: "General V", generation: .fifth, colour: .green, cost: 56, trainPool: 4, dicePool: 5, rust: .unavailable),
         ]
         
         return locos
