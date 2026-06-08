@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4D48D50D2FD6FA3300F8DAF9 /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D48D50C2FD6FA3300F8DAF9 /* Werks */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4D48D4EF2FD6F9B200F8DAF9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -39,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D48D50D2FD6FA3300F8DAF9 /* Werks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +95,7 @@
 			);
 			name = EngineYard;
 			packageProductDependencies = (
+				4D48D50C2FD6FA3300F8DAF9 /* Werks */,
 			);
 			productName = EngineYard;
 			productReference = 4D48D4DB2FD6F9B100F8DAF9 /* EngineYard.app */;
@@ -146,6 +152,9 @@
 			);
 			mainGroup = 4D48D4D22FD6F9B100F8DAF9;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4D48D50B2FD6FA3300F8DAF9 /* XCLocalSwiftPackageReference "../Werks" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4D48D4DC2FD6F9B100F8DAF9 /* Products */;
 			projectDirPath = "";
@@ -475,6 +484,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		4D48D50B2FD6FA3300F8DAF9 /* XCLocalSwiftPackageReference "../Werks" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../Werks;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4D48D50C2FD6FA3300F8DAF9 /* Werks */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Werks;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4D48D4D32FD6F9B100F8DAF9 /* Project object */;
 }
