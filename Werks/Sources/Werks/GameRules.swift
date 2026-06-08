@@ -35,7 +35,7 @@ public enum GameRules {
 
     public enum Locomotives {
         public static let total: Int = 14
-        public static let totalDiceCapacity: Int = 46
+        public static let expectedDicePoolTotal: Int = 46
     }
 
     public enum Cards {
@@ -64,7 +64,7 @@ public enum GameRules {
 
     /// Testing enum
     public enum Testing {
-    /// Expected card generations for each livery (used in internal and unit tests)
+    /// Expected card generations for each colour
     public static let expectedGenerationsForLivery: [LocomotiveColor: [GenerationExpectation]] = [
             .green:  [.init(generation: 1, count: 4),
                         .init(generation: 2, count: 4),

@@ -22,7 +22,8 @@ public struct Locomotive: Hashable, Equatable, Codable {
     public let trainPool: Int
     public let dicePool: Int
     
-    static public func == (lhs: Locomotive, rhs:Locomotive) -> Bool {
+    // Equatable conformance
+    public static func == (lhs: Locomotive, rhs:Locomotive) -> Bool {
         return (lhs.id == rhs.id)
     }
     

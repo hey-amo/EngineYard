@@ -19,6 +19,7 @@ final class LocomotiveTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        self.locomotives.removeAll()
     }
 
     // MARK: Locomotive Tests
@@ -27,5 +28,15 @@ final class LocomotiveTests: XCTestCase {
         let expected = GameRules.Locomotives.total
         XCTAssertEqual(count, expected, "Expected \(expected) locomotives, but got \(count)")
     }
+    
+    // Expect the `dicePool` total to match GameRules
+    func testDicePoolTotal() {
+        // write functional code to total up the `dicePool` integer
+        // test that this number = GameRules.expectedDicePoolTotal
+    }
+    
+    
+    
+    
 
 }
