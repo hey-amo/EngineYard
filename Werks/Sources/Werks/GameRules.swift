@@ -85,7 +85,7 @@ public enum GameRules {
                             .init(generation: 2, count: 2)]
         ]
         
-    /// Convenience lookup to give me an expected count for livery, generation
+    /// Convenience lookup to give me an expected count for colour, generation
     public static func count(for colour: LocomotiveColor, generation: Int) -> Int? {
             expectedGenerationsForLivery[colour]?.first { $0.generation == generation }?.count
         }
