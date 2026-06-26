@@ -36,7 +36,7 @@ final class GameBoardTests: XCTestCase {
     
     /// Verifies that each locomotive creates the correct number of cards based on its trainPool
     func testCardsPerLocomotive() {
-        for locomotive in gameBoard.locomotives {
+        for locomotive in gameBoard.spaces {
             let cardsForLoco = gameBoard.cards.filter { $0.locomotiveID == locomotive.id }
             XCTAssertEqual(cardsForLoco.count, locomotive.trainPool,
                           "Locomotive \(locomotive.id) (\(locomotive.name)) should have \(locomotive.trainPool) cards, but got \(cardsForLoco.count)")
@@ -61,7 +61,7 @@ final class GameBoardTests: XCTestCase {
     
     /// Verifies that all cards reference valid locomotive IDs
     func testCardsReferenceValidLocomotives() {
-        let validLocoIDs = Set(gameBoard.locomotives.map { $0.id })
+        let validLocoIDs = Set(gameBoard.spaces.map { $0.id })
         
         for card in gameBoard.cards {
             XCTAssertTrue(validLocoIDs.contains(card.locomotiveID),
@@ -77,7 +77,7 @@ final class GameBoardTests: XCTestCase {
         
         for (color, expectedCount) in expectedCounts {
             let cardsForColor = gameBoard.cards.filter { card in
-                if let locomotive = gameBoard.locomotives.first(where: { $0.id == card.locomotiveID }) {
+                if let locomotive = gameBoard.spaces.first(where: { $0.id == card.locomotiveID }) {
                     return locomotive.colour == color
                 }
                 return false
@@ -95,7 +95,7 @@ final class GameBoardTests: XCTestCase {
                 let generation = Generation(rawValue: expectation.generation) ?? .first
                 
                 let cardsForColorAndGen = gameBoard.cards.filter { card in
-                    if let locomotive = gameBoard.locomotives.first(where: { $0.id == card.locomotiveID }) {
+                    if let locomotive = gameBoard.spaces.first(where: { $0.id == card.locomotiveID }) {
                         return locomotive.colour == color && locomotive.generation == generation
                     }
                     return false
