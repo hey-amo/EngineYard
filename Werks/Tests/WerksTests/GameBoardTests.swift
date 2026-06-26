@@ -9,7 +9,7 @@ import XCTest
 
 @testable import Werks
 
-// test gameboard creation
+// Test gameboard creation
 
 
 // MARK: - Private GameBoard Class
