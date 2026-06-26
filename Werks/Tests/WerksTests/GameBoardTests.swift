@@ -11,49 +11,6 @@ import XCTest
 
 // Test gameboard creation
 
-
-// MARK: - Private GameBoard Class
-
-/// A temporary private class that holds the entire gameboard with locomotives and their cards
-fileprivate class GameBoard {
-    let locomotives: [Locomotive]
-    var cards: [LocomotiveCard] = []
-    
-    init() {
-        self.locomotives = Locomotive.buildTrains()
-        self.createCards()
-    }
-    
-    /// Creates locomotive cards based on each locomotive's trainPool
-    private func createCards() {
-        var cardID = 1
-        
-        for locomotive in locomotives {
-            // Create trainPool number of cards for this locomotive
-            for _ in 0..<locomotive.trainPool {
-                let card = LocomotiveCard(id: cardID, locomotiveID: locomotive.id)
-                cards.append(card)
-                cardID += 1
-            }
-        }
-    }
-    
-    /// Returns the total number of cards created
-    var cardCount: Int {
-        return cards.count
-    }
-    
-    /// Returns locomotives grouped by their cards
-    func getLocomotiveWithCards(for locomotiveID: Int) -> (locomotive: Locomotive, cards: [LocomotiveCard])? {
-        guard let locomotive = locomotives.first(where: { $0.id == locomotiveID }) else {
-            return nil
-        }
-        
-        let locomotiveCards = cards.filter { $0.locomotiveID == locomotiveID }
-        return (locomotive: locomotive, cards: locomotiveCards)
-    }
-}
-
 final class GameBoardTests: XCTestCase {
 
     private var gameBoard: GameBoard!

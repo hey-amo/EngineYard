@@ -85,4 +85,20 @@ final class LocomotiveTests: XCTestCase {
         }
     }
     
+    func testAgeAdvancesRustWithoutGoingPastObsolete() {
+        var locomotive = Locomotive(id: 999, name: "Test", generation: .first, colour: .green, cost: 1, trainPool: 1, dicePool: 1, rust: .unavailable)
+        
+        locomotive.age()
+        XCTAssertEqual(locomotive.rust, .new)
+        
+        locomotive.age()
+        XCTAssertEqual(locomotive.rust, .ageing)
+        
+        locomotive.age()
+        XCTAssertEqual(locomotive.rust, .obsolete)
+        
+        locomotive.age()
+        XCTAssertEqual(locomotive.rust, .obsolete)
+    }
+    
 }

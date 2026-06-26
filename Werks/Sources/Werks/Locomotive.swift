@@ -13,7 +13,7 @@ public enum Rust: Int, CaseIterable, Codable {
 }
 
 // Locomotive struct
-public struct Locomotive: Hashable, Equatable, Codable {
+public class Locomotive: Hashable, Equatable, Codable {
     public let id: Int
     public let name: String
     public let generation: Generation
@@ -27,7 +27,7 @@ public struct Locomotive: Hashable, Equatable, Codable {
     }
     public let trainPool: Int
     public let dicePool: Int
-    public let rust: Rust
+    public var rust: Rust
     
     // Equatable conformance
     public static func == (lhs: Locomotive, rhs:Locomotive) -> Bool {
@@ -38,23 +38,42 @@ public struct Locomotive: Hashable, Equatable, Codable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+
+    init(id: Int, name: String, generation: Generation, colour: LocomotiveColor, cost: Int, trainPool: Int, dicePool: Int, rust: Rust = .unavailable) {
+        self.id = id
+        self.name = name
+        self.generation = generation
+        self.colour = colour
+        self.cost = cost
+        self.trainPool = trainPool
+        self.dicePool = dicePool
+        self.rust = rust
+    }
 }
 
 extension Locomotive {
-    // FIX THIS: This should be for a specific generation and colour
-    public var avatar: String {
-        switch self.colour {
-        case .green: return "train-green.png"
-        case .yellow: return "train-yellow.png"
-        case .red: return "train-red.png"
-        case .blue: return "train-blue.png"
+    public static func avatarName(for generation: Generation, colour: LocomotiveColor) -> String {
+        let candidate: String = "train-\(generation.rawValue)-\(colour.avatarKey)"
+        let fallback: String = "train-\(colour.avatarKey)"
+
+        if Bundle.main.url(forResource: candidate, withExtension: "png") != nil {
+            return candidate
         }
+
+        return fallback
+    }
+
+    public var avatar: String {
+        Self.avatarName(for: generation, colour: colour)
     }
 }
 
 extension Locomotive {
     public func age() {
-        // ages the train
+        let allRustCases = Rust.allCases
+        guard let currentIndex = allRustCases.firstIndex(of: rust) else { return }
+        let nextIndex = min(currentIndex + 1, allRustCases.count - 1)
+        rust = allRustCases[nextIndex]
     }
 }
 
@@ -106,6 +125,15 @@ extension LocomotiveColor: CustomStringConvertible {
         case .red: return "Red"
         case .yellow: return "Yellow"
         case .blue: return "Blue"
+        }
+    }
+
+    var avatarKey: String {
+        switch self {
+        case .green: return "green"
+        case .red: return "red"
+        case .yellow: return "yellow"
+        case .blue: return "blue"
         }
     }
 }
