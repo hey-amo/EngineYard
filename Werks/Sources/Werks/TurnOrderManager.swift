@@ -8,3 +8,10 @@
 import Foundation
 
 // Turn order manager TBD
+public protocol TurnTaking {
+
+}
+
+public class TurnOrderManager: TurnTaking {
+    // TBD
+}

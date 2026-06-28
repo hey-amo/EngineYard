@@ -1,6 +1,10 @@
 import Foundation
 
-public class GameBoard {
+public protocol GameBoardConfig {
+    func unlockNext()
+}
+
+public class GameBoard: GameBoardConfig {
     public var spaces: [Locomotive] = [Locomotive]() 
     public var cards: [LocomotiveCard] = []
 
@@ -27,13 +31,8 @@ public class GameBoard {
         return cards.count
     }
 
-    /// Returns locomotives grouped by their cards
-    public func getLocomotiveWithCards(for locomotiveID: Int) -> (locomotive: Locomotive, cards: [LocomotiveCard])? {
-        guard let locomotive = spaces.first(where: { $0.id == locomotiveID }) else {
-            return nil
-        }
-        
-        let locomotiveCards = cards.filter { $0.locomotiveID == locomotiveID }
-        return (locomotive: locomotive, cards: locomotiveCards)
+    /// Unlocks next board space
+    public func unlockNext() {
+        // TBD
     }
 }
