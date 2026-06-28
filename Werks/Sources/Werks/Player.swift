@@ -18,11 +18,13 @@ public class Player: NSObject, GKGameModelPlayer {
     public var avatar: String
     public var cash: Int
     public var isAI: Bool
+    public var cards: [LocomotiveCard]
     
-    init(playerId: Int, avatar: String, cash: Int = 0, isAI: Bool = false) {
+    init(playerId: Int, avatar: String, cash: Int = 0, isAI: Bool = false, cards: [LocomotiveCard] = [LocomotiveCard]()) {
         self.playerId = playerId
         self.avatar = avatar
         self.cash = cash
         self.isAI = isAI
+        self.cards = cards 
     }
 }
