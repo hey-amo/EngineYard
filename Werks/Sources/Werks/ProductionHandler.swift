@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ProductionHandler {
+public class ProductionHandler {
     
     /*
     private var production: LocomotiveCard.ProductionUnits // should this be a tuple?

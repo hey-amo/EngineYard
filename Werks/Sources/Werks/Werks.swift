@@ -108,10 +108,12 @@ public enum GameStage: Int, CaseIterable, Codable {
 public class Werks {
     public var gameStage: GameStage = .idle
     public var gameBoard: [Locomotive]
+    public var players: [Player]
     
     init(gameStage: GameStage, gameBoard: [Locomotive] = [Locomotive]()) {
         self.gameStage = gameStage
         self.gameBoard = gameBoard
+        self.players = [Player]() // Initialise empty players array
     }
 }
 
