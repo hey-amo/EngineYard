@@ -16,6 +16,28 @@ internal protocol ProductionUnitMutable {
     func addProductionUnits(_ units: Int) throws
 }
 
+public enum ProductionShiftError: Error {
+    case sameLocomotiveCard
+    case insufficientUnits
+    case invalidTargetCard 
+    case invalidSourceCard
+}
+
+extension ProductionShiftError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .sameLocomotiveCard:
+            return NSLocalizedString("Cannot shift units to the same locomotive card.", comment: "")
+        case .insufficientUnits:
+            return NSLocalizedString("Insufficient production units to shift.", comment: "")
+        case .invalidTargetCard:
+            return NSLocalizedString("Invalid target locomotive card.", comment: "")
+        case .invalidSourceCard:
+            return NSLocalizedString("Invalid source locomotive card.", comment: "")
+        }
+    }
+}
+
 public class ProductionHandler {
 
     public init() {}
@@ -33,14 +55,26 @@ public class ProductionHandler {
         try mutableTarget.addProductionUnits(units)
     }
 
-    public func spendUnits() {
-
+    public func spendUnits(_ units: Int, from target: ProductionUnitReadable) throws {
+        guard let mutableTarget: any ProductionUnitMutable = target as? ProductionUnitMutable else {
+            return
+        }
+        try mutableTarget.spendProductionUnits(units)
     }
     public func resetUnits() {
+        guard let mutableTarget: any ProductionUnitMutable = target as? ProductionUnitMutable else {
+            return
+        }
+        mutableTarget.resetProductionUnits()
     }
 
     // needs validation
-    public func shiftUnits(from: LocomotiveCard, to: LocomotiveCard, unitsToShift: Int) {
+    public func shiftUnits(from: LocomotiveCard, to: LocomotiveCard, unitsToShift: Int) throws {
+        // the player needs to own both cards, and the cost must be higher and the card has to be active?
+        // can't be the same card, 
+        guard from.locomotiveID != to.locomotiveID else {
+            return
+        }
     }
 
 }
