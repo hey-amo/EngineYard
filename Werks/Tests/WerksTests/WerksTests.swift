@@ -2,11 +2,18 @@ import XCTest
 @testable import Werks
 
 final class WerksTests: XCTestCase {
-    func testExample() throws {
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
+    func testMessageHandlerStoresAndClearsMessages() throws {
+        let handler = GameMessageHandler()
+        let game = Werks(gameStage: .idle, messageHandler: handler)
 
-        // Defining Test Cases and Test Methods
-        // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
+        let message = GameMessage(message: "Round started")
+        game.messageHandler.add(message)
+
+        XCTAssertEqual(game.gameMessages.count, 1)
+        XCTAssertEqual(game.gameMessages.first?.message, "Round started")
+
+        game.messageHandler.clear()
+
+        XCTAssertTrue(game.gameMessages.isEmpty)
     }
 }

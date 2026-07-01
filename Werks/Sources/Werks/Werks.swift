@@ -108,22 +108,28 @@ public enum GameStage: Int, CaseIterable, Codable {
 public class Werks {
     public var gameStage: GameStage = .idle
     public var gameBoard: [Locomotive]
-    public var gameMessages: [GameMessage] = []
     public var players: [Player]
+    public var messageHandler: GameMessageHandling
+
+    public var gameMessages: [GameMessage] {
+        messageHandler.messages
+    }
     
-    init(gameStage: GameStage, gameBoard: [Locomotive] = [Locomotive]()) {
+    public init(gameStage: GameStage, gameBoard: [Locomotive] = [Locomotive](), messageHandler: GameMessageHandling = GameMessageHandler()) {
         self.gameStage = gameStage
         self.gameBoard = gameBoard
         self.players = [Player]() // Initialise empty players array
+        self.messageHandler = messageHandler
     }
 }
 
 extension Werks {
     public func addGameMessage(_ message: GameMessage) {
-        gameMessages.append(message)
+        messageHandler.add(message)
     }
+
     public func clearGameMessages() {
-        gameMessages.removeAll()
+        messageHandler.clear()
     }
 }
 

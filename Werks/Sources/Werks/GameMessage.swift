@@ -1,9 +1,28 @@
 import Foundation
 
-public enum GameMessageType {
-    case info
-    case warning
-    case error
+public enum GameMessageType: Int, Codable {
+    case info, warning, error
+}
+
+public protocol GameMessageHandling: AnyObject {
+    var messages: [GameMessage] { get }
+
+    func add(_ message: GameMessage)
+    func clear()
+}
+
+public final class GameMessageHandler: GameMessageHandling {
+    public private(set) var messages: [GameMessage] = []
+
+    public init() {}
+
+    public func add(_ message: GameMessage) {
+        messages.append(message)
+    }
+
+    public func clear() {
+        messages.removeAll()
+    }
 }
 
 public struct GameMessage {
