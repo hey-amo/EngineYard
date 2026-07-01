@@ -7,8 +7,6 @@
 
 import Foundation
 
-typealias LocoCard = LocomotiveCard
-
 // There are 14 Locomotives in the game, each locomotive has a number of `cards` assigned to it
 // Each Locomotive `card` has productionUnits, productionUnitsSpent
 // A player can only own 1 `card` per locomotive (max: 14 cards)
