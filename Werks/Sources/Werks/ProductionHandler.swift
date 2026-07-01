@@ -14,6 +14,8 @@ public protocol ProductionUnitReadable {
 
 internal protocol ProductionUnitMutable {
     func addProductionUnits(_ units: Int) throws
+    func spendProductionUnits(_ units: Int) throws
+    func resetProductionUnits()
 }
 
 public enum ProductionShiftError: Error {
@@ -56,13 +58,14 @@ public class ProductionHandler {
     }
 
     public func spendUnits(_ units: Int, from target: ProductionUnitReadable) throws {
-        guard let mutableTarget: any ProductionUnitMutable = target as? ProductionUnitMutable else {
+        guard let mutableTarget = target as? any ProductionUnitMutable else {
             return
         }
         try mutableTarget.spendProductionUnits(units)
     }
-    public func resetUnits() {
-        guard let mutableTarget: any ProductionUnitMutable = target as? ProductionUnitMutable else {
+
+    public func resetUnits(for target: ProductionUnitReadable) {
+        guard let mutableTarget = target as? any ProductionUnitMutable else {
             return
         }
         mutableTarget.resetProductionUnits()

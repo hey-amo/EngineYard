@@ -6,35 +6,30 @@
 //
 
 import Foundation
-import GameplayKit
 
 public protocol ModifyD6 {
-    mutating func increment(_ value: Int) -> Int
-    mutating func decrement(_ value: Int) -> Int
+    static func increment(_ value: Int) -> Int
+    static func decrement(_ value: Int) -> Int
+    static func isValid(_ value: Int) -> Bool
 }
 
-public struct D6 {
-    public static let minValue: Int = 1
-    public static  let maxValue: Int = 6
-    private let seed: GKRandomDistribution
-    
+public struct D6: ModifyD6 {
+    public static let minValue = 1
+    public static let maxValue = 6
+
     public static func roll() -> Int {
-        let seed: GKRandomDistribution = GKRandomDistribution.d6()
-        return seed.nextInt()
+        Int.random(in: minValue...maxValue)
     }
-}
 
-extension D6: ModifyD6 {
-    public mutating func increment(_ value: Int) -> Int {
-        guard value < D6.maxValue else { return D6.maxValue }
-                return value + 1
+    public static func increment(_ value: Int) -> Int {
+        isValid(value) ? min(value + 1, maxValue) : maxValue
     }
-    public mutating func decrement(_ value: Int) -> Int {
-        guard value > D6.minValue else { return D6.minValue }
-               return value - 1
+
+    public static func decrement(_ value: Int) -> Int {
+        isValid(value) ? max(value - 1, minValue) : minValue
     }
-    
-    public func isValid(value: Int) -> Bool {
-       return (value >= D6.minValue && value <= D6.maxValue)
+
+    public static func isValid(_ value: Int) -> Bool {
+        (minValue...maxValue).contains(value)
     }
 }
