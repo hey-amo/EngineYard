@@ -15,7 +15,7 @@ public class Bank {
 
     public func payTax(on amount: Int = 0) throws -> Int {
         _ = try NumericValidator.validatePositiveAmount(amount)
-        let sum = Tax.calculate(on: amount)
+        let sum: Int = Tax.calculate(on: amount)
         return amount - sum
     }
 
@@ -42,7 +42,7 @@ public class Bank {
 
     private func canDebit(_ amount: Int = 0) throws -> Bool {
         _ = try NumericValidator.validatePositiveAmount(amount)
-        let _ = try NumericValidator.validateSufficientFunds(balance, required: amount)
+        _ = try NumericValidator.validateSufficientFunds(balance, required: amount)
         return true
     }
 }
