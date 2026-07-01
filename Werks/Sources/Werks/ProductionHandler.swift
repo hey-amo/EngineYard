@@ -7,22 +7,40 @@
 
 import Foundation
 
+public protocol ProductionUnitReadable {
+    var productionUnits: Int { get }
+    var productionUnitsSpent: Int { get }
+}
+
+internal protocol ProductionUnitMutable {
+    func addProductionUnits(_ units: Int) throws
+}
+
 public class ProductionHandler {
+
+    public init() {}
+
+    /// Use cases:
+    /// (1) Add Units to a LocomotiveCard
+    /// (2) Exhaust Units from a LocomotiveCard by moving units to SpentUnits
+    /// (3) Reset SpentUnits back to Units, and reset SpentUnits to 0
+    /// (4) Shift production units from 1 LocomotiveCard to another LocomotiveCard (the player must own both cards, and the cost must be higher)
     
-    /*
-    private var production: LocomotiveCard.ProductionUnits // should this be a tuple?
-    
-    public func addUnits(_ amount: Int = 0) {
-        // use validation to - amount cannot be negative or zero
+    public func addUnits(_ units: Int, to target: ProductionUnitReadable) throws {
+        guard let mutableTarget = target as? ProductionUnitMutable else {
+            return
+        }
+        try mutableTarget.addProductionUnits(units)
     }
-    
-    public func spendUnits(_ amount: Int = 0) {
-        // use validation - can't spend negative, can't spend more than you have, the balance after spending can't be less than 0
+
+    public func spendUnits() {
+
     }
-    
-    public func reset() {
-        // set units += unitsSpent
-        // set unitsSpent to 0
-        // update production
-    }*/
+    public func resetUnits() {
+    }
+
+    // needs validation
+    public func shiftUnits(from: LocomotiveCard, to: LocomotiveCard, unitsToShift: Int) {
+    }
+
 }
