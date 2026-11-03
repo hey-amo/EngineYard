@@ -19,6 +19,13 @@ public enum LocomotiveGeneration: Int, CaseIterable, Codable, Sendable {
     case first, second, third, fourth, fifth
 }
 
+/*
+The current Locomotive combines both categories. I’d split it into:
+`LocomotiveDefinition` — fixed ID, name, color, generation, costs, dicePool, and total card count.
+`LocomotiveState` — available card count, optional initial order, existing and filled order dice, and rust/availability status.
+`BoardSpace` — a definition plus its mutable state, held in the board’s fixed-order array.
+*/
+
 public struct Locomotive: Codable, Identifiable, Hashable, Equatable, Sendable {
     public let id: UInt
     public let name: String
@@ -53,6 +60,15 @@ extension Locomotive: CustomStringConvertible {
         return "🚂 Locomotive ID: " // display the entire locomotive data nicely in logs
     }
 }
+
+// ---------------------------------
+
+// Force the struct to update
+
+
+// ---------------------------------
+
+// MARK: - Locomotive Factory
 
 extension Locomotive {
     // A list of 14 locomotives in the game hardcoded. 
