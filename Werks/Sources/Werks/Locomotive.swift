@@ -1,0 +1,80 @@
+//
+//  Locomotive.swift
+//  Werks
+//
+//  Created by Amarjit on 03/11/2026.
+//
+
+import Foundation
+
+public enum Rust: Int, CaseIterable, Codable, Sendable {
+    case inactive, active, rusting, rusted
+}
+
+public enum LocomotiveLivery: Int, CaseIterable, Codable, Sendable {
+    case green, red, yellow, blue
+}
+
+public enum LocomotiveGeneration: Int, CaseIterable, Codable, Sendable {
+    case first, second, third, fourth, fifth
+}
+
+public struct Locomotive: Codable, Identifiable, Hashable, Equatable, Sendable {
+    public let id: UInt
+    public let name: String
+    public let colour: LocomotiveLivery
+    public let generation: LocomotiveGeneration
+    public let cost: Int // cost to build this locomotive. min: 0
+    public var productionCost: Int { // productionCost is always half of cost
+        get { return cost.roundedUpHalf() }
+    }
+    public var income: Int { // income is always half of productionCost
+        //get { return Self.roundedUpHalf(of: self.productionCost) }
+        get { return self.productionCost.roundedUpHalf() }
+    }
+    public let dicePool: UInt // how many dice this locomotive gets. min:0
+    public let trainPool: UInt // how many cards does this locomotive has. min:0
+    public let initialOrders: UInt // defaults to 0
+    public let existingOrders: [Int] // array has a max capacity: dicePool
+    public let filledOrders: [Int] // array has a max capacity: dicePool
+    public let rust: Rust // defaults to `inactive` state
+
+    public var maxDice: UInt { // the dice in existing and filled, defaults to 0
+        get {
+            let existing = UInt(existingOrders.count)
+            let filled = UInt(filledOrders.count)
+            let (total, overflow) = existing.addingReportingOverflow(filled)
+            return overflow ? .max : total
+        }
+    }
+}
+
+extension Locomotive {
+    // a list of 14 locomotives in the game hardcoded. it does not generate cards
+    public static func buildAll() -> [Locomotive] {
+        
+        /*
+        # 🚂 Train Manifest
+
+        | **ID** | **Name** | **Colour** | **Cost** | **Colour Code** | **Gen** | **TrainPool** | **Dice** |
+        |:------:|:----------------------------|:-----------|:--------:|:----------------:|:-------:|:--------:|:--------:|
+        | 1  | General I (4-2-1)          | Green  | 4  | 1 | 1 | 4 | 3 |
+        | 2  | Fast Freight I (8-4-2)     | Red    | 8  | 2 | 1 | 3 | 3 |
+        | 3  | Heavy I (12-6-3)           | Yellow | 12 | 3 | 1 | 2 | 2 |
+        | 4  | Special I (16-8-4)         | Blue   | 16 | 4 | 1 | 1 | 2 |
+        | 5  | General II (20-10-5)       | Green  | 20 | 1 | 2 | 4 | 4 |
+        | 6  | Fast Freight II (24-12-6)  | Red    | 24 | 2 | 2 | 3 | 3 |
+        | 7  | Heavy II (28-14-7)         | Yellow | 28 | 3 | 2 | 2 | 3 |
+        | 8  | General III (32-16-8)      | Green  | 32 | 1 | 3 | 4 | 4 |
+        | 9  | Special II (36-18-9)       | Blue   | 36 | 4 | 2 | 2 | 2 |
+        | 10 | Fast Freight III (40-20-10)| Red    | 40 | 2 | 3 | 3 | 4 |
+        | 11 | General IV (44-22-11)      | Green  | 44 | 1 | 4 | 4 | 4 |
+        | 12 | Heavy III (48-24-12)       | Yellow | 48 | 3 | 3 | 3 | 3 |
+        | 13 | Fast Freight IV (52-26-13) | Red    | 52 | 2 | 4 | 4 | 4 |
+        | 14 | General V (56-28-14)       | Green  | 56 | 1 | 5 | 4 | 5 |
+        ------------------------------------
+         */
+        return [
+        ]
+    }
+}
