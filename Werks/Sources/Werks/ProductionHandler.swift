@@ -5,19 +5,24 @@
 import Foundation
 
 public protocol ProductionHandlerDelegate: Sendable {
-    func addUnits(_ units: UInt) async
-    func spendUnits(_ units: UInt) async
+    func addUnits(_ unitsToAdd: UInt) async
+    func spendUnits(_ unitsToSpend: UInt) async
     func resetUnits() async
     func shiftUnits() async // from 1 card to another TBC
 }
 
-public actor ProductionHandler: ProductionHandlerDelegate {
-    private var units: UInt = 0
-    private var spentUnits: UInt = 0
+public protocol ProductionHandlerDidUpdateDelegate: Sendable {
+    func productionHandlerDidUpdate(_ handler: ProductionHandler) async
+}
 
-    public func addUnits(_ units: UInt) {
+public actor ProductionHandler: ProductionHandlerDelegate {
+    public private(set) var units: UInt = 0
+    public private(set) var spentUnits: UInt = 0
+
+    public func addUnits(_ unitsToAdd: UInt) {
         // Implementation for adding units
-        guard units > 0 else { return }
+        guard unitsToAdd > 0 else { return }
+        self.units += unitsToAdd
     }
 
     public func spendUnits(_ unitsToSpend: UInt) {
@@ -34,6 +39,7 @@ public actor ProductionHandler: ProductionHandlerDelegate {
     }
 
     public func shiftUnits() {
-        // Implementation for shifting units
+        // Implementation for shifting units from 1 card to another
+        // In the game, if the sending card has 0 units, it is removed from play
     }
 }
