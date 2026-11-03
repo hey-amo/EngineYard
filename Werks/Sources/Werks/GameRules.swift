@@ -13,13 +13,14 @@ public enum GameRules {
         public static let minCoins: Int = 0
         public static let maxCoins: Int = 1000
         
-        public static let seedCapitalThreePlayers: Int = 14
+        public static let seedCapitalThreePlayers: Int = 12 // in 3-4 players: get $12
+        public static let seedCapitalFivePlayers: Int = 14 // in 5-players: get $14
     
         /// The game ends when any player has more than this many coins.
         public static let endGameCoinThreshold: Int = 330
 
         /// Store the tax rate as an integer percentage
-        public static let taxPercent: Int = 10
+        public static let taxRate: Int = 10
     }
     
     public static func hasReachedEndCondition(coins: [Int]) -> Bool {

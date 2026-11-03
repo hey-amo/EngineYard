@@ -32,9 +32,9 @@ public struct Locomotive: Codable, Identifiable, Hashable, Equatable, Sendable {
         //get { return Self.roundedUpHalf(of: self.productionCost) }
         get { return self.productionCost.roundedUpHalf() }
     }
-    public let dicePool: UInt // how many dice this locomotive gets. min:0
-    public let trainPool: UInt // how many cards does this locomotive has. min:0
-    public let initialOrders: UInt // defaults to 0
+    public let dicePool: Int // how many dice this locomotive gets. min:0
+    public let trainPool: Int // how many cards does this locomotive has. min:0
+    public let initialOrders: Int? // defaults to -1 meaning there isn't any
     public let existingOrders: [Int] // array has a max capacity: dicePool
     public let filledOrders: [Int] // array has a max capacity: dicePool
     public let rust: Rust // defaults to `inactive` state
@@ -56,7 +56,7 @@ extension Locomotive {
         /*
         # 🚂 Train Manifest
 
-        | **ID** | **Name** | **Colour** | **Cost** | **Colour Code** | **Gen** | **TrainPool** | **Dice** |
+        | **ID** | **Name** | **Colour** | **Cost** | **Colour Code** | **Generation** | **TrainPool** | **Dice** |
         |:------:|:----------------------------|:-----------|:--------:|:----------------:|:-------:|:--------:|:--------:|
         | 1  | General I (4-2-1)          | Green  | 4  | 1 | 1 | 4 | 3 |
         | 2  | Fast Freight I (8-4-2)     | Red    | 8  | 2 | 1 | 3 | 3 |
@@ -75,6 +75,7 @@ extension Locomotive {
         ------------------------------------
          */
         return [
+            Locomotive.init(id: 1, name: "Green.1st", colour: .green, generation: .first, cost: 4, dicePool: 3, trainPool: 4, initialOrders: -1, existingOrders: [Int](), filledOrders: [Int](), rust: .inactive)
         ]
     }
 }
