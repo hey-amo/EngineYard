@@ -13,7 +13,7 @@ public enum GameRules {
         public static let minCoins: Int = 0
         public static let maxCoins: Int = 1000
         
-        public static seedCapitalThreePlayers: Int = 14
+        public static let seedCapitalThreePlayers: Int = 14
     
         /// The game ends when any player has more than this many coins.
         public static let endGameCoinThreshold: Int = 330
