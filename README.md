@@ -1,6 +1,13 @@
-# EngineYard
+# 🚂 EngineYard
+@updated: 03 Nov 2026
 
-@updated: 18 May 2026
+Hobby attempt at creating a turn-based game based on `Locomotive Werks` board game.
 
-🚂 Hobby attempt at converting a popular board game about train manufacturing into swift
+Uses:
+- Swift 5.x
 
+Aims:
+- Offline mode (Pass and play and verses bots)
+
+Won't be doing:
+- Online mode
