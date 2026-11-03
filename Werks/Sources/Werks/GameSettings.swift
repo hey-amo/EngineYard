@@ -1,18 +1,18 @@
 //
-//  SoundSetting.swift
+//  GameSettings.swift
 //  Werks
 //
 //  Created by Amarjit on 03/11/2026.
 //
 
-public enum GameSetting: CaseIterable, Sendable {
+public enum Preferences: CaseIterable, Sendable {
     case sound
     case music
     case darkMode
     case haptics
 }
 
-public struct SoundSetting: Equatable, Sendable {
+public struct GameSetting: Equatable, Sendable {
     public private(set) var isSoundEnabled: Bool
     public private(set) var isMusicEnabled: Bool
     public private(set) var isDarkModeEnabled: Bool
@@ -30,7 +30,7 @@ public struct SoundSetting: Equatable, Sendable {
         self.areHapticsEnabled = hapticsEnabled
     }
 
-    public func isEnabled(_ setting: GameSetting) -> Bool {
+    public func isEnabled(_ setting: Preferences) -> Bool {
         switch setting {
         case .sound: isSoundEnabled
         case .music: isMusicEnabled
@@ -39,7 +39,7 @@ public struct SoundSetting: Equatable, Sendable {
         }
     }
 
-    public mutating func set(_ setting: GameSetting, enabled: Bool) {
+    public mutating func set(_ setting: Preferences, enabled: Bool) {
         switch setting {
         case .sound: isSoundEnabled = enabled
         case .music: isMusicEnabled = enabled
@@ -48,7 +48,7 @@ public struct SoundSetting: Equatable, Sendable {
         }
     }
 
-    public mutating func toggle(_ setting: GameSetting) {
+    public mutating func toggle(_ setting: Preferences) {
         set(setting, enabled: !isEnabled(setting))
     }
 }

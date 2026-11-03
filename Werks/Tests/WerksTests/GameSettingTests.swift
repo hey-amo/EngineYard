@@ -1,13 +1,13 @@
 //
-//  SoundSettingTests.swift
+//  GameSettingsTests.swift
 //  Werks
 
 import XCTest
 @testable import Werks
 
-final class SoundSettingTests: XCTestCase {
+final class GameSettingTests: XCTestCase {
     func testDefaults() {
-        let settings = SoundSetting()
+        let settings = GameSetting()
 
         XCTAssertTrue(settings.isSoundEnabled)
         XCTAssertTrue(settings.isMusicEnabled)
@@ -16,7 +16,7 @@ final class SoundSettingTests: XCTestCase {
     }
 
     func testInitializerSetsEachSettingIndependently() {
-        let settings = SoundSetting(
+        let settings = GameSetting(
             soundEnabled: false,
             musicEnabled: true,
             darkModeEnabled: true,
@@ -30,7 +30,7 @@ final class SoundSettingTests: XCTestCase {
     }
 
     func testToggleChangesOnlySelectedSetting() {
-        var settings = SoundSetting()
+        var settings = GameSetting()
 
         settings.toggle(.music)
 
@@ -44,9 +44,9 @@ final class SoundSettingTests: XCTestCase {
     }
 
     func testSetEnablesAndDisablesEachSetting() {
-        var settings = SoundSetting()
+        var settings = GameSetting()
 
-        for setting in GameSetting.allCases {
+        for setting in Preferences.allCases {
             settings.set(setting, enabled: false)
             XCTAssertFalse(settings.isEnabled(setting))
 
