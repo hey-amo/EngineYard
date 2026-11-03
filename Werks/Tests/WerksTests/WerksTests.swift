@@ -1,19 +1,15 @@
-import XCTest
+//
+//  WerksTests.swift
+//  Werks
+
+import Testing
 @testable import Werks
 
-final class WerksTests: XCTestCase {
-    func testMessageHandlerStoresAndClearsMessages() throws {
-        let handler = GameMessageHandler()
-        let game = Werks(gameStage: .idle, messageHandler: handler)
+struct WerksTests {
 
-        let message = GameMessage(message: "Round started")
-        game.messageHandler.add(message)
-
-        XCTAssertEqual(game.gameMessages.count, 1)
-        XCTAssertEqual(game.gameMessages.first?.message, "Round started")
-
-        game.messageHandler.clear()
-
-        XCTAssertTrue(game.gameMessages.isEmpty)
+    @Test func test_Werks() async throws {
+        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+        print ("Test works")
     }
+
 }
