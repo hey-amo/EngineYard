@@ -9,41 +9,38 @@ import XCTest
 @testable import Werks
 
 private class DummyPlayer: Identifiable {
-    let ID: Int
+    let id: Int
     let coins: Int
+
     init(id: Int, coins: Int) {
-        self.ID = id
+        self.id = id
         self.coins = coins
     }
 }
 
 final class WinnerTests: XCTestCase {
-
-    private var dummyPlayers: [DummyPlayer]?
-    
-    override func setUpWithError() throws {
-    }
-
-    override func tearDownWithError() throws {
-        dummyPlayers?.removeAll()
-        dummyPlayers = nil
-    }
-
     func testOnlyOneWinner() throws {
         let players = [
             DummyPlayer(id: 1, coins: 100), DummyPlayer(id: 2, coins: 125), DummyPlayer.init(id: 3, coins: 330)
         ]
-        // sort it by most coins
-        // expect player 3 to be the winner
-        // expect only 1 player to be the winner
+        let sortedPlayers = players.sorted { $0.coins > $1.coins }
+        let highestCoinTotal = try XCTUnwrap(sortedPlayers.first?.coins)
+        let winners = sortedPlayers.filter { $0.coins == highestCoinTotal }
+
+        XCTAssertEqual(sortedPlayers.first?.id, 3)
+        XCTAssertEqual(winners.map(\.id), [3])
+        XCTAssertEqual(winners.count, 1)
     }
 
     func testTwoTiedWinners() throws {
         let players = [
             DummyPlayer(id: 1, coins: 100), DummyPlayer(id: 2, coins: 330), DummyPlayer.init(id: 3, coins: 330)
         ]
-        // sort it by most coins
-        // expect player 2 & 3 to be joint winners
-        // expect 2 players to be the joint winners
+        let sortedPlayers = players.sorted { $0.coins > $1.coins }
+        let highestCoinTotal = try XCTUnwrap(sortedPlayers.first?.coins)
+        let winners = sortedPlayers.filter { $0.coins == highestCoinTotal }
+
+        XCTAssertEqual(Set(winners.map(\.id)), [2, 3])
+        XCTAssertEqual(winners.count, 2)
     }
 }
