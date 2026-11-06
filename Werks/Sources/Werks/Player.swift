@@ -11,7 +11,6 @@ public actor Player: Identifiable, Hashable {
     public nonisolated let id: UUID
 
     public private(set) var coins: UInt32
-    public private(set) var cards: [LocomotiveCard]?
 
     public init(id: UUID = UUID(), coins: UInt32) {
         self.id = id
