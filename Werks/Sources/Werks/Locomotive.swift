@@ -2,187 +2,173 @@
 //  Locomotive.swift
 //  Werks
 //
-//  Created by Amarjit on 19/05/2026.
+//  Created by Amarjit on 03/11/2026.
 //
 
 import Foundation
 
-// Locomotives can be in different states of rust
-public enum Rust: Int, CaseIterable, Codable {
-    case unavailable = -1, new = 1, ageing = 2, obsolete = 3
+public enum Rust: Int, CaseIterable, Codable, Sendable {
+    case unavailable, active, rusting, obsolete
 }
 
-// Locomotive struct
-public class Locomotive: Hashable, Equatable, Codable {
-    public let id: Int
+public enum LocomotiveLivery: Int, CaseIterable, Codable, Sendable {
+    case green, red, yellow, blue
+}
+
+public enum LocomotiveGeneration: Int, CaseIterable, Codable, Sendable {
+    case first, second, third, fourth, fifth
+}
+
+public struct LocomotiveDefinition: Codable, Identifiable, Hashable, Sendable {
+    public let id: UInt
     public let name: String
-    public let generation: Generation
-    public let colour: LocomotiveColor
+    public let colour: LocomotiveLivery
+    public let generation: LocomotiveGeneration
     public let cost: Int
-    public var productionCost: Int {
-        return Int(cost / 2)
-    }
-    public var income: Int {
-        return Int(productionCost / 2)
-    }
-    public let trainPool: Int
     public let dicePool: Int
-    public var rust: Rust
-    
-    // Equatable conformance
-    public static func == (lhs: Locomotive, rhs:Locomotive) -> Bool {
-        return (lhs.id == rhs.id)
-    }
-    
-    // Hashable conformance
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+    public let totalCardCount: Int
 
-    init(id: Int, name: String, generation: Generation, colour: LocomotiveColor, cost: Int, trainPool: Int, dicePool: Int, rust: Rust = .unavailable) {
-        self.id = id
-        self.name = name
-        self.generation = generation
-        self.colour = colour
-        self.cost = cost
-        self.trainPool = trainPool
-        self.dicePool = dicePool
-        self.rust = rust
-    }
-}
+    public var productionCost: Int { cost.roundedUpHalf() }
+    public var income: Int { productionCost.roundedUpHalf() }
 
-extension Locomotive {
-    public static func avatarName(for generation: Generation, colour: LocomotiveColor) -> String {
-        let candidate: String = "train-\(generation.rawValue)-\(colour.avatarKey)"
-        let fallback: String = "train-\(colour.avatarKey)"
-
-        if Bundle.main.url(forResource: candidate, withExtension: "png") != nil {
-            return candidate
-        }
-
-        return fallback
-    }
-
-    public var avatar: String {
-        Self.avatarName(for: generation, colour: colour)
-    }
-}
-
-extension Locomotive {
-    public func age() {
-        let allRustCases = Rust.allCases
-        guard let currentIndex = allRustCases.firstIndex(of: rust) else { return }
-        let nextIndex = min(currentIndex + 1, allRustCases.count - 1)
-        rust = allRustCases[nextIndex]
-    }
-}
-
-// --------------------------------
-// MARK: Locomotive Generation
-// --------------------------------
-
-public enum Generation: Int, CaseIterable, Codable {
-    case first = 1, second, third, fourth, fifth
-}
-
-extension Generation: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .first: return "First"
-        case .second: return "Second"
-        case .third: return "Third"
-        case .fourth: return "Fourth"
-        case .fifth: return "Fifth"
-        }
-    }
-}
-
-
-extension Generation: Equatable {
-    static func > (lhs: Generation, rhs: Generation) -> Bool {
-        return (lhs.rawValue > rhs.rawValue)
-    }
-    static func < (lhs: Generation, rhs: Generation) -> Bool {
-        return (lhs.rawValue < rhs.rawValue)
-    }
-    public static func == (lhs: Generation, rhs: Generation) -> Bool {
-        return (lhs.rawValue == rhs.rawValue)
-    }
-}
-
-
-// --------------------------------
-// MARK: Locomotive Colour (Livery)
-// --------------------------------
-public enum LocomotiveColor: Int, CaseIterable, Equatable, Codable, Sendable {
-    case green = 1, red, yellow, blue
-}
-
-extension LocomotiveColor: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case .green: return "Green"
-        case .red: return "Red"
-        case .yellow: return "Yellow"
-        case .blue: return "Blue"
-        }
-    }
-
-    var avatarKey: String {
-        switch self {
-        case .green: return "green"
-        case .red: return "red"
-        case .yellow: return "yellow"
-        case .blue: return "blue"
-        }
-    }
-}
-
-// MARK: Build Trains
-
-extension Locomotive {
-    /// Build 14 trains
-    public static func buildTrains() -> [Locomotive] {
-        let locos: [Locomotive] = [
-            Locomotive(id: 1, name: "General I", generation: .first, colour: .green, cost: 4, trainPool: 4, dicePool: 3, rust: .unavailable),
-            Locomotive(id: 2, name: "Fast Freight I", generation: .first, colour: .red, cost: 8, trainPool: 3, dicePool: 3, rust: .unavailable),
-            Locomotive(id: 3, name: "Heavy I", generation: .first, colour: .yellow, cost: 12, trainPool: 2, dicePool: 2, rust: .unavailable),
-            Locomotive(id: 4, name: "Special I", generation: .first, colour: .blue, cost: 16, trainPool: 1, dicePool: 2, rust: .unavailable),
-            Locomotive(id: 5, name: "General II", generation: .second, colour: .green, cost: 20, trainPool: 4, dicePool: 4, rust: .unavailable),
-            Locomotive(id: 6, name: "Fast Freight II", generation: .second, colour: .red, cost: 24, trainPool: 3, dicePool: 3, rust: .unavailable),
-            Locomotive(id: 7, name: "Heavy II", generation: .second, colour: .yellow, cost: 28, trainPool: 2, dicePool: 3, rust: .unavailable),
-            Locomotive(id: 8, name: "General III", generation: .third, colour: .green, cost: 32, trainPool: 4, dicePool: 4, rust: .unavailable),
-            Locomotive(id: 9, name: "Special II", generation: .second, colour: .blue, cost: 36, trainPool: 2, dicePool: 2, rust: .unavailable),
-            Locomotive(id: 10, name: "Fast Freight III", generation: .third, colour: .red, cost: 40, trainPool: 3, dicePool: 4, rust: .unavailable),
-            Locomotive(id: 11, name: "General IV", generation: .fourth, colour: .green, cost: 44, trainPool: 4, dicePool: 4, rust: .unavailable),
-            Locomotive(id: 12, name: "Heavy III", generation: .third, colour: .yellow, cost: 48, trainPool: 3, dicePool: 3, rust: .unavailable),
-            Locomotive(id: 13, name: "Fast Freight IV", generation: .fourth, colour: .red, cost: 52, trainPool: 4, dicePool: 4, rust: .unavailable),
-            Locomotive(id: 14, name: "General V", generation: .fifth, colour: .green, cost: 56, trainPool: 4, dicePool: 5, rust: .unavailable),
+    public static func buildAll() -> [LocomotiveDefinition] {
+        [
+            .init(id: 1, name: "Green.1st", colour: .green, generation: .first, cost: 4, dicePool: 3, totalCardCount: 4),
+            .init(id: 2, name: "Red.1st", colour: .red, generation: .first, cost: 8, dicePool: 3, totalCardCount: 3),
+            .init(id: 3, name: "Yellow.1st", colour: .yellow, generation: .first, cost: 12, dicePool: 2, totalCardCount: 2),
+            .init(id: 4, name: "Blue.1st", colour: .blue, generation: .first, cost: 16, dicePool: 1, totalCardCount: 1),
+            .init(id: 5, name: "Green.2nd", colour: .green, generation: .second, cost: 20, dicePool: 4, totalCardCount: 4),
+            .init(id: 6, name: "Red.2nd", colour: .red, generation: .second, cost: 24, dicePool: 3, totalCardCount: 3),
+            .init(id: 7, name: "Yellow.2nd", colour: .yellow, generation: .second, cost: 28, dicePool: 3, totalCardCount: 2),
+            .init(id: 8, name: "Green.3rd", colour: .green, generation: .third, cost: 32, dicePool: 4, totalCardCount: 4),
+            .init(id: 9, name: "Blue.2nd", colour: .blue, generation: .second, cost: 36, dicePool: 2, totalCardCount: 2),
+            .init(id: 10, name: "Red.3rd", colour: .red, generation: .third, cost: 40, dicePool: 4, totalCardCount: 3),
+            .init(id: 11, name: "Green.4th", colour: .green, generation: .fourth, cost: 44, dicePool: 5, totalCardCount: 4),
+            .init(id: 12, name: "Yellow.3rd", colour: .yellow, generation: .third, cost: 48, dicePool: 3, totalCardCount: 3),
+            .init(id: 13, name: "Red.4th", colour: .red, generation: .fourth, cost: 52, dicePool: 4, totalCardCount: 4),
+            .init(id: 14, name: "Green.5th", colour: .green, generation: .fifth, cost: 56, dicePool: 5, totalCardCount: 4)
         ]
-        
-        return locos
     }
 }
 
+public struct LocomotiveState: Codable, Equatable, Sendable {
+    public private(set) var availableCardCount: Int
+    public private(set) var initialOrder: Int?
+    public private(set) var existingOrders: [Int]
+    public private(set) var filledOrders: [Int]
+    public private(set) var rust: Rust
 
-/*
- # 🚂 Trains
+    init(cardCount: Int) {
+        self.availableCardCount = cardCount
+        self.initialOrder = nil
+        self.existingOrders = []
+        self.filledOrders = []
+        self.rust = .unavailable
+    }
 
- | **ID** | **Name** | **Colour** | **Cost** | **Colour Int** | **Generation** | **Pool** | **Dice** |
- |:------:|:----------------------------|:-----------|:--------:|:----------------:|:-------:|:--------:|:--------:|
- | 1  | General I (4-2-1)          | Green  | 4  | 1 | 1 | 4 | 3 |
- | 2  | Fast Freight I (8-4-2)     | Red    | 8  | 2 | 1 | 3 | 3 |
- | 3  | Heavy I (12-6-3)           | Yellow | 12 | 3 | 1 | 2 | 2 |
- | 4  | Special I (16-8-4)         | Blue   | 16 | 4 | 1 | 1 | 2 |
- | 5  | General II (20-10-5)       | Green  | 20 | 1 | 2 | 4 | 4 |
- | 6  | Fast Freight II (24-12-6)  | Red    | 24 | 2 | 2 | 3 | 3 |
- | 7  | Heavy II (28-14-7)         | Yellow | 28 | 3 | 2 | 2 | 3 |
- | 8  | General III (32-16-8)      | Green  | 32 | 1 | 3 | 4 | 4 |
- | 9  | Special II (36-18-9)       | Blue   | 36 | 4 | 2 | 2 | 2 |
- | 10 | Fast Freight III (40-20-10)| Red    | 40 | 2 | 3 | 3 | 4 |
- | 11 | General IV (44-22-11)      | Green  | 44 | 1 | 4 | 4 | 4 |
- | 12 | Heavy III (48-24-12)       | Yellow | 48 | 3 | 3 | 3 | 3 |
- | 13 | Fast Freight IV (52-26-13) | Red    | 52 | 2 | 4 | 4 | 4 |
- | 14 | General V (56-28-14)       | Green  | 56 | 1 | 5 | 4 | 5 |
- ------------------------------------
- */
+    var orderCount: Int {
+        existingOrders.count + filledOrders.count
+    }
+
+    mutating func setInitialOrder(_ value: Int) {
+        initialOrder = value
+        activateIfUnavailable()
+    }
+
+    mutating func addExistingOrder(_ value: Int) {
+        existingOrders.append(value)
+        activateIfUnavailable()
+    }
+
+    mutating func addFilledOrder(_ value: Int) {
+        filledOrders.append(value)
+        activateIfUnavailable()
+    }
+
+    mutating func developCard(dicePool: Int) throws {
+        guard rust != .obsolete else {
+            throw GameBoardError.spaceUnavailable
+        }
+        guard initialOrder != nil || !existingOrders.isEmpty else {
+            throw GameBoardError.noMarketDemand
+        }
+        guard rust != .unavailable else {
+            throw GameBoardError.spaceUnavailable
+        }
+        guard availableCardCount > 0 else {
+            throw GameBoardError.noCardsAvailable
+        }
+        if let order = initialOrder {
+            guard orderCount < dicePool else {
+                throw GameBoardError.orderCapacityExceeded
+            }
+            existingOrders.append(order)
+            initialOrder = nil
+        }
+        availableCardCount -= 1
+    }
+
+    mutating func markObsolete() {
+        availableCardCount = 0
+        initialOrder = nil
+        existingOrders.removeAll()
+        filledOrders.removeAll()
+        rust = .obsolete
+    }
+
+    mutating func markRusting() {
+        rust = .rusting
+    }
+
+    private mutating func activateIfUnavailable() {
+        if rust == .unavailable {
+            rust = .active
+        }
+    }
+}
+
+public struct BoardSpace: Codable, Identifiable, Equatable, Sendable {
+    public let definition: LocomotiveDefinition
+    public private(set) var state: LocomotiveState
+
+    public var id: UInt { definition.id }
+
+    init(definition: LocomotiveDefinition) {
+        self.definition = definition
+        self.state = LocomotiveState(cardCount: definition.totalCardCount)
+    }
+
+    mutating func setInitialOrder(_ value: Int) {
+        state.setInitialOrder(value)
+    }
+
+    mutating func addExistingOrder(_ value: Int) {
+        state.addExistingOrder(value)
+    }
+
+    mutating func addFilledOrder(_ value: Int) {
+        state.addFilledOrder(value)
+    }
+
+    mutating func developCard() throws {
+        try state.developCard(dicePool: definition.dicePool)
+    }
+
+    mutating func markRusting() {
+        state.markRusting()
+    }
+
+    mutating func markObsolete() {
+        state.markObsolete()
+    }
+}
+
+public enum GameBoardError: Error, Equatable, Sendable {
+    case spaceNotFound
+    case invalidDieValue
+    case initialOrderAlreadySet
+    case orderCapacityExceeded
+    case noCardsAvailable
+    case noMarketDemand
+    case spaceUnavailable
+}

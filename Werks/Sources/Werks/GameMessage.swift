@@ -1,38 +1,57 @@
+//
+//  GameMessage.swift
+//  Werks
+//
+
 import Foundation
 
-public enum GameMessageType: Int, Codable {
-    case info, warning, error
+public enum GameMessageType: Int, Codable, Hashable, Sendable {
+    case info, warning, success, error
 }
 
-public protocol GameMessageHandling: AnyObject {
-    var messages: [GameMessage] { get }
+public struct GameMessage: Identifiable, Codable, Sendable, Hashable, Equatable {
+    public let id: UUID
+    public let date: Date
+    public let message: String
+    public let messageType: GameMessageType
 
-    func add(_ message: GameMessage)
-    func clear()
+    public init(
+        id: UUID = UUID(),
+        date: Date = Date(),
+        message: String,
+        messageType: GameMessageType = .info
+    ) {
+        self.id = id
+        self.date = date
+        self.message = message
+        self.messageType = messageType
+    }
 }
 
-public final class GameMessageHandler: GameMessageHandling {
-    public private(set) var messages: [GameMessage] = []
+// Only keep last 100 messages
+// - Can `add, `clear`, and `get` messages
+// - Messages are stored in an array, and sorted by date, with the most recent messages first
+public struct GameLog: Sendable {
+    private var _messages: [GameMessage] = []
+    public let messageLimit: Int = 100
 
     public init() {}
 
-    public func add(_ message: GameMessage) {
-        messages.append(message)
+    public var showLatestMessages: [GameMessage] {
+        _messages
     }
 
-    public func clear() {
-        messages.removeAll()
+    public mutating func add(message: GameMessage) {
+        _messages.append(message)
+        _messages.sort { $0.date > $1.date }
+
+        if _messages.count > messageLimit {
+            _messages.removeLast(_messages.count - messageLimit)
+        }
     }
-}
-
-public struct GameMessage {
-    public let message: String
-    public let timestamp: Date
-    public let type: GameMessageType
-
-    public init(message: String, timestamp: Date = Date(), messageType: GameMessageType = .info) {
-        self.message = message
-        self.timestamp = timestamp
-        self.type = messageType
+    
+    public mutating func clearLog() {
+        guard !_messages.isEmpty else { return }
+        _messages.removeAll()
     }
 }

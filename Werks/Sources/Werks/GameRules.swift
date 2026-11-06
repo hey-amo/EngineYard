@@ -1,94 +1,79 @@
-    //
-    //  GameRules.swift
-    //  Werks
-    //
-    //  Created by Amarjit on 19/05/2026.
-    //
-
-    // MARK: Game Rules
+//
+//  GameRules.swift
+//  Werks
+//
+//  Created by Amarjit on 03/11/2026.
+//
 
 public enum GameRules {
-    public enum Player {
-        public static let min: Int = 3
-        public static let max: Int = 5
-
-        public static func isValidPlayerCount( _ count: Int) -> Bool {
-            return (min...max).contains(count)
-        }
-    }
+    public static let minimumPlayers: Int = 3
+    public static let maximumPlayers: Int = 5
 
     public enum Economy {
-        public static let taxRate: Double = 0.10
-        public static let endGameCoins: Int = 330
-        public static let seedCoins: [Int: Int] = [
-            3: 12, 4: 12, 5: 14
-        ]
-
-        public static func giveStartingCoins(for playerCount: Int) -> Int {
-            seedCoins[playerCount] ?? 0
-        }
-
-        public static func isGameOver(coins: Int) -> Bool {
-            coins >= endGameCoins
-        }
-    }
-
-    public enum Locomotives {
-        public static let total: Int = 14
-        public static let expectedDicePoolTotal: Int = 46
-    }
-
-    public enum Cards {
-    public static let totals: [LocomotiveColor: Int] = [
-        .green: 20, .red: 13, .yellow: 7, .blue: 3
-    ]
-    /// Computed total number of cards across all locomotives
-    public static var total: Int { 
-        totals.values.reduce(0, +) // Should be 20+13+7+3 = 43  
-    }
-
-    /// Lookup helper for specific locomotive livery
-    public static func total(for color: LocomotiveColor) -> Int {
-        totals[color] ?? 0
-    }
-
-    /// Expected breakdown for internal testing reference
-    public static let expectedBreakdown: [LocomotiveColor: [GenerationExpectation]] = GameRules.Testing.expectedGenerationsForLivery
-    }
-
-    /// Struct to model expectations more clearly
-    public struct GenerationExpectation : Sendable {
-    public let generation: Int
-    public let count: Int
-    }
-
-    /// Testing enum
-    public enum Testing {
-    /// Expected card generations for each colour
-    public static let expectedGenerationsForLivery: [LocomotiveColor: [GenerationExpectation]] = [
-            .green:  [.init(generation: 1, count: 4),
-                        .init(generation: 2, count: 4),
-                        .init(generation: 3, count: 4),
-                        .init(generation: 4, count: 4),
-                        .init(generation: 5, count: 4)],
-            
-                .red:    [.init(generation: 1, count: 3),
-                            .init(generation: 2, count: 3),
-                            .init(generation: 3, count: 3),
-                            .init(generation: 4, count: 4)],
-            
-                .yellow: [.init(generation: 1, count: 2),
-                            .init(generation: 2, count: 2),
-                            .init(generation: 3, count: 3)],
-            
-                .blue:   [.init(generation: 1, count: 1),
-                            .init(generation: 2, count: 2)]
-        ]
+        public static let minCoins: Int = 0
+        public static let maxCoins: Int = 1000
         
-    /// Convenience lookup to give me an expected count for colour, generation
-    public static func count(for colour: LocomotiveColor, generation: Int) -> Int? {
-            expectedGenerationsForLivery[colour]?.first { $0.generation == generation }?.count
+        public static let seedCapitalThreePlayers: Int = 12 // in 3-4 players: get $12
+        public static let seedCapitalFivePlayers: Int = 14 // in 5-players: get $14
+    
+        /// The game ends when any player has more than this many coins.
+        public static let endGameCoinThreshold: Int = 330
+
+        /// Store the tax rate as an integer percentage
+        public static let taxRate: Int = 10
+    }
+    
+    public static func hasReachedEndCondition(coins: [Int]) -> Bool {
+        coins.contains { $0 >= GameRules.Economy.endGameCoinThreshold }
+    }
+
+    // MARK: - Locomotive inventory
+
+    public struct CardInventoryRule: Sendable, Equatable {
+        public let livery: LocomotiveLivery
+        public let generation: LocomotiveGeneration
+        public let count: Int
+
+        public init(
+            livery: LocomotiveLivery,
+            generation: LocomotiveGeneration,
+            count: Int
+        ) {
+            self.livery = livery
+            self.generation = generation
+            self.count = count
         }
+    }
+
+    public static let locomotiveCardInventory: [CardInventoryRule] = [
+        .init(livery: .green, generation: .first, count: 4),
+        .init(livery: .green, generation: .second, count: 4),
+        .init(livery: .green, generation: .third, count: 4),
+        .init(livery: .green, generation: .fourth, count: 4),
+        .init(livery: .green, generation: .fifth, count: 4),
+
+        .init(livery: .red, generation: .first, count: 3),
+        .init(livery: .red, generation: .second, count: 3),
+        .init(livery: .red, generation: .third, count: 3),
+        .init(livery: .red, generation: .fourth, count: 4),
+
+        .init(livery: .yellow, generation: .first, count: 2),
+        .init(livery: .yellow, generation: .second, count: 2),
+        .init(livery: .yellow, generation: .third, count: 3),
+
+        .init(livery: .blue, generation: .first, count: 1),
+        .init(livery: .blue, generation: .second, count: 2)
+    ]
+
+    public static let locomotiveCardCount =
+        locomotiveCardInventory.reduce(0) { $0 + $1.count }
+
+    public static func locomotiveCardCount(for livery: LocomotiveLivery) -> Int {
+        locomotiveCardInventory
+            .filter { $0.livery == livery }
+            .reduce(0) { $0 + $1.count }
     }
 
 }
+
+

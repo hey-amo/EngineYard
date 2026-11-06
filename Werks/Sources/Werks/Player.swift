@@ -2,29 +2,26 @@
 //  Player.swift
 //  Werks
 //
-//  Created by Amarjit on 20/05/2026.
+//  Created by Amarjit on 03/11/2026.
 //
 
 import Foundation
-import GameplayKit
 
-// A list of all turn states
-public enum PlayerTurnState: Int, CaseIterable, Codable {
-    case idle, onTurn, thinking, takingTurn
-}
+public actor Player: Identifiable, Hashable {
+    public nonisolated let id: UUID
 
-public class Player: NSObject, GKGameModelPlayer {
-    public var playerId: Int
-    public var avatar: String
-    public var cash: Int
-    public var isAI: Bool
-    public var cards: [LocomotiveCard]
-    
-    init(playerId: Int, avatar: String, cash: Int = 0, isAI: Bool = false, cards: [LocomotiveCard] = [LocomotiveCard]()) {
-        self.playerId = playerId
-        self.avatar = avatar
-        self.cash = cash
-        self.isAI = isAI
-        self.cards = cards 
+    public private(set) var coins: UInt32
+
+    public init(id: UUID = UUID(), coins: UInt32) {
+        self.id = id
+        self.coins = coins
+    }
+
+    public nonisolated static func == (lhs: Player, rhs: Player) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    public nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

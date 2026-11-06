@@ -2,17 +2,13 @@
 //  Tax.swift
 //  Werks
 //
-//  Created by Amarjit on 20/05/2026.
+//  Created by Amarjit on 03/11/2026.
 //
 
-import Foundation
-
-public struct Tax {
-    private static let rate: Double = GameRules.Economy.taxRate
-    
-    public static func calculate(on amount: Int) -> Int {
-        guard (amount > 0) else { return 0 }
-        
-        return Int(floor(Double(amount) * Tax.rate))
+public struct Tax: Sendable {
+    /// Calculates 10% tax, rounded down to an integer
+    public static func calculate(on amount: Int = 0) -> Int {
+        guard amount > 0 else { return 0 }
+        return amount * GameRules.Economy.taxRate / 100
     }
 }

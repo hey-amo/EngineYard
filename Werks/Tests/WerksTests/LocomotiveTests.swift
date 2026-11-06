@@ -2,105 +2,57 @@
 //  LocomotiveTests.swift
 //  Werks
 //
-//  Created by Amarjit on 20/05/2026.
+//  Created by Amarjit on 03/11/2026.
 //
 
 import XCTest
-
 @testable import Werks
 
-// Test locomotives
 final class LocomotiveTests: XCTestCase {
+    func testBuildAllReturnsManifestTrainPools() {
+        let locomotives = LocomotiveDefinition.buildAll()
 
-    private var locomotives: [Locomotive] = [Locomotive]()
-    
-    override func setUp() async throws {
-        locomotives = Locomotive.buildTrains()        
+        XCTAssertEqual(locomotives.count, 14)
+        XCTAssertEqual(locomotives.map(\.totalCardCount), [4, 3, 2, 1, 4, 3, 2, 4, 2, 3, 4, 3, 4, 4])
+        XCTAssertEqual(locomotives.map(\.name), [
+            "Green.1st", "Red.1st", "Yellow.1st", "Blue.1st",
+            "Green.2nd", "Red.2nd", "Yellow.2nd", "Green.3rd",
+            "Blue.2nd", "Red.3rd", "Green.4th", "Yellow.3rd",
+            "Red.4th", "Green.5th"
+        ])
+        XCTAssertEqual(locomotives.reduce(0) { $0 + $1.totalCardCount }, 43)
     }
 
-    override func tearDown() {
-        super.tearDown()
-        self.locomotives.removeAll()
+    func testTrainPoolCountsByColourAndGeneration() {
+        let locomotives = LocomotiveDefinition.buildAll()
+        let expectedCounts: [(LocomotiveLivery, [Int])] = [
+            (.green, [4, 4, 4, 4, 4]),
+            (.red, [3, 3, 3, 4, 0]),
+            (.yellow, [2, 2, 3, 0, 0]),
+            (.blue, [1, 2, 0, 0, 0])
+        ]
+
+        for (colour, expectedByGeneration) in expectedCounts {
+            let actualByGeneration = LocomotiveGeneration.allCases.map { generation in
+                locomotives
+                    .filter { $0.colour == colour && $0.generation == generation }
+                    .reduce(0) { $0 + $1.totalCardCount }
+            }
+
+            XCTAssertEqual(actualByGeneration, expectedByGeneration, "\(colour)")
+        }
     }
 
-    // MARK: Locomotive Tests
-    
+    func testDicePoolTotalIs46() {
+        let totalDicePool = LocomotiveDefinition.buildAll().reduce(0) { $0 + $1.dicePool }
 
-    /*
-    /// Verifies that the total number of locomotives built matches the expected count from GameRules
-    func testLocomotiveCount() {
-        let count = locomotives.count
-        let expected = GameRules.Locomotives.total
-        XCTAssertEqual(count, expected, "Expected \(expected) locomotives, but got \(count)")
+        XCTAssertEqual(totalDicePool, 46)
     }
-    
-    /// Verifies that the combined dicePool from all locomotives matches the expected total
-    /// This ensures that the game's difficulty/progression curve is maintained across all locomotives
-    func testDicePoolTotal() {
-        // Sum all dicePool values from each locomotive using reduce
-        let totalDicePool = locomotives.reduce(0) { sum, locomotive in
-            sum + locomotive.dicePool
-        }
-        
-        // Verify the total matches the expected value from GameRules
-        let expected = GameRules.Locomotives.expectedDicePoolTotal
-        XCTAssertEqual(totalDicePool, expected, 
-                      "Expected total dicePool of \(expected), but got \(totalDicePool)")
+
+    func testCostsAreMultiplesOfFourAndTotal420() {
+        let costs = LocomotiveDefinition.buildAll().map(\.cost)
+
+        XCTAssertTrue(costs.allSatisfy { $0.isMultiple(of: 4) })
+        XCTAssertEqual(costs.reduce(0, +), 420)
     }
-    
-    /// Verifies that all expected locomotives are created with the correct properties
-    /// This test ensures buildTrains() creates valid locomotive data matching GameRules specifications
-    func testAllLocomotivesPresent() {
-        // Verify we have exactly the expected number of locomotives
-        XCTAssertEqual(locomotives.count, GameRules.Locomotives.total,
-                      "Should have exactly \(GameRules.Locomotives.total) locomotives")
-        
-        // Verify each locomotive has a unique ID from 1 to 14
-        let ids = Set(locomotives.map { $0.id })
-        XCTAssertEqual(ids.count, GameRules.Locomotives.total,
-                      "All locomotive IDs should be unique")
-        XCTAssertEqual(ids, Set(1...GameRules.Locomotives.total),
-                      "Locomotive IDs should range from 1 to \(GameRules.Locomotives.total)")
-        
-        // Verify each locomotive has a non-empty name
-        for locomotive in locomotives {
-            XCTAssertFalse(locomotive.name.isEmpty, 
-                          "Locomotive \(locomotive.id) should have a non-empty name")
-        }
-        
-        // Verify each locomotive has valid dicePool value (> 0)
-        for locomotive in locomotives {
-            XCTAssertGreaterThan(locomotive.dicePool, 0,
-                               "Locomotive \(locomotive.id) (\(locomotive.name)) should have dicePool > 0")
-        }
-        
-        // Verify each locomotive has a valid generation
-        for locomotive in locomotives {
-            XCTAssertNotNil(Generation(rawValue: locomotive.generation.rawValue),
-                          "Locomotive \(locomotive.id) should have a valid generation")
-        }
-        
-        // Verify each locomotive has a valid colour
-        for locomotive in locomotives {
-            XCTAssertTrue(LocomotiveColor.allCases.contains(locomotive.colour),
-                         "Locomotive \(locomotive.id) should have a valid colour")
-        }
-    }
-    
-    func testAgeAdvancesRustWithoutGoingPastObsolete() {
-        let locomotive = Locomotive(id: 999, name: "Test", generation: .first, colour: .green, cost: 1, trainPool: 1, dicePool: 1, rust: .unavailable)
-        
-        locomotive.age()
-        XCTAssertEqual(locomotive.rust, .new)
-        
-        locomotive.age()
-        XCTAssertEqual(locomotive.rust, .ageing)
-        
-        locomotive.age()
-        XCTAssertEqual(locomotive.rust, .obsolete)
-        
-        locomotive.age()
-        XCTAssertEqual(locomotive.rust, .obsolete)
-    }
-    **/    
 }

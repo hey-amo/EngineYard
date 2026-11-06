@@ -1,83 +1,45 @@
 //
 //  ProductionHandler.swift
 //  Werks
-//
-//  Created by Amarjit on 08/06/2026.
-//
 
 import Foundation
 
-public protocol ProductionUnitReadable {
-    var productionUnits: Int { get }
-    var productionUnitsSpent: Int { get }
+public protocol ProductionHandlerDelegate: Sendable {
+    func addUnits(_ unitsToAdd: UInt) async
+    func spendUnits(_ unitsToSpend: UInt) async
+    func resetUnits() async
+    func shiftUnits() async // from 1 card to another TBC
 }
 
-internal protocol ProductionUnitMutable {
-    func addProductionUnits(_ units: Int) throws
-    func spendProductionUnits(_ units: Int) throws
-    func resetProductionUnits()
+public protocol ProductionHandlerDidUpdateDelegate: Sendable {
+    func productionHandlerDidUpdate(_ handler: ProductionHandler) async
 }
 
-public enum ProductionShiftError: Error {
-    case sameLocomotiveCard
-    case insufficientUnits
-    case invalidTargetCard 
-    case invalidSourceCard
-}
+public actor ProductionHandler: ProductionHandlerDelegate {
+    public private(set) var units: UInt = 0
+    public private(set) var spentUnits: UInt = 0
 
-extension ProductionShiftError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .sameLocomotiveCard:
-            return NSLocalizedString("Cannot shift units to the same locomotive card.", comment: "")
-        case .insufficientUnits:
-            return NSLocalizedString("Insufficient production units to shift.", comment: "")
-        case .invalidTargetCard:
-            return NSLocalizedString("Invalid target locomotive card.", comment: "")
-        case .invalidSourceCard:
-            return NSLocalizedString("Invalid source locomotive card.", comment: "")
-        }
-    }
-}
-
-public class ProductionHandler {
-
-    public init() {}
-
-    /// Use cases:
-    /// (1) Add Units to a LocomotiveCard
-    /// (2) Exhaust Units from a LocomotiveCard by moving units to SpentUnits
-    /// (3) Reset SpentUnits back to Units, and reset SpentUnits to 0
-    /// (4) Shift production units from 1 LocomotiveCard to another LocomotiveCard (the player must own both cards, and the cost must be higher)
-    
-    public func addUnits(_ units: Int, to target: ProductionUnitReadable) throws {
-        guard let mutableTarget = target as? ProductionUnitMutable else {
-            return
-        }
-        try mutableTarget.addProductionUnits(units)
+    public func addUnits(_ unitsToAdd: UInt) {
+        // Implementation for adding units
+        guard unitsToAdd > 0 else { return }
+        self.units += unitsToAdd
     }
 
-    public func spendUnits(_ units: Int, from target: ProductionUnitReadable) throws {
-        guard let mutableTarget = target as? any ProductionUnitMutable else {
-            return
-        }
-        try mutableTarget.spendProductionUnits(units)
+    public func spendUnits(_ unitsToSpend: UInt) {
+        // Implementation for spending units
+        guard unitsToSpend > 0, unitsToSpend <= units else { return }
+        spentUnits += unitsToSpend
+        units -= unitsToSpend
     }
 
-    public func resetUnits(for target: ProductionUnitReadable) {
-        guard let mutableTarget = target as? any ProductionUnitMutable else {
-            return
-        }
-        mutableTarget.resetProductionUnits()
+    public func resetUnits() {
+        // Implementation for resetting units to spent
+        units = spentUnits
+        spentUnits = 0
     }
 
-    // needs validation
-    public func shiftUnits(from: LocomotiveCard, to: LocomotiveCard, unitsToShift: Int) throws {
-        // the player needs to own both cards, and the cost must be higher and the card has to be active?
-        // can't be the same card, 
-        guard from.locomotiveID != to.locomotiveID else {
-            return
-        }
+    public func shiftUnits() {
+        // Implementation for shifting units from 1 card to another
+        // In the game, if the sending card has 0 units, it is removed from play
     }
-
 }

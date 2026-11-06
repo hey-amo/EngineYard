@@ -1,50 +1,51 @@
 //
-//  File.swift
+//  LocomotiveCard.swift
 //  Werks
 //
-//  Created by Amarjit on 08/06/2026.
+//  Created by Amarjit on 03/11/2026.
 //
 
 import Foundation
 
-// There are 14 Locomotives in the game, each locomotive has a number of `cards` assigned to it
-// Each Locomotive `card` has productionUnits, productionUnitsSpent
-// A player can only own 1 `card` per locomotive (max: 14 cards)
+public enum LocomotiveCardState: Int, CaseIterable, Codable, Sendable {
+    case inactive, inplay, owned, removed
+}
 
-public class LocomotiveCard: Hashable, Equatable, Codable, ProductionUnitReadable, ProductionUnitMutable {
-    public let id: Int
-    public let locomotiveID: Int // which locomotive does this card belong to
+public actor LocomotiveCard: Sendable, Identifiable, Hashable, Equatable {
+    public let id: UUID    
+    public let locomotiveID: Int
+    public private(set) var productionUnits: UInt
+    public private(set) var spentUnits: UInt
+    public private(set) var state: LocomotiveCardState = .inactive
     
-    public private(set) var productionUnits: Int = 0
-    public private(set) var productionUnitsSpent: Int = 0
-    
-    init(id: Int, locomotiveID: Int) {
+    init(id: UUID, locomotiveID: Int = 0, productionUnits: UInt = 0, spentUnits: UInt = 0, state: LocomotiveCardState = .inactive) {
         self.id = id
         self.locomotiveID = locomotiveID
-    }
-
-    internal func addProductionUnits(_ units: Int) throws {
-        _ = try NumericValidator.validatePositiveAmount(units)
-        productionUnits += units
-    }
-    internal func spendProductionUnits(_ units: Int) throws {
-        _ = try NumericValidator.validatePositiveAmount(units)
-        _ = try NumericValidator.validateSufficientFunds(productionUnits, required: units)
-        productionUnits -= units
-        productionUnitsSpent += units
-    }
-    internal func resetProductionUnits() {
-        productionUnits += productionUnitsSpent
-        productionUnitsSpent = 0
+        self.productionUnits = productionUnits
+        self.spentUnits = spentUnits
+        self.state = state
     }
     
-    // Equatable conformance
-    public static func == (lhs: LocomotiveCard, rhs: LocomotiveCard) -> Bool {
-        return (lhs.id == rhs.id)
-    }
-    
-    // Hashable conformance
-    public func hash(into hasher: inout Hasher) {
+    nonisolated public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(locomotiveID)
+    }
+    
+    public static func ==(lhs: LocomotiveCard, rhs: LocomotiveCard) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension LocomotiveCard: @preconcurrency CustomStringConvertible {
+    public var description: String {
+        return "🚂 LocomotiveCard ID: \(id), LocomotiveID: \(locomotiveID), ProductionUnits: \(productionUnits), SpentUnits: \(spentUnits)"
+    }
+}
+
+extension LocomotiveCard: @preconcurrency ProductionHandlerDidUpdateDelegate {
+    public func productionHandlerDidUpdate(_ handler: ProductionHandler) async {
+        // Update the productionUnits and spentUnits based on the handler's state
+        self.productionUnits = await UInt(handler.units)
+        self.spentUnits = await UInt(handler.spentUnits)
     }
 }
