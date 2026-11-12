@@ -1,8 +1,2 @@
-// Werks package
-
-// Main game engine for unofficial clone of `Locomotive Werks`.
-
-import Foundation
-
-public class Werks {}
-
+// The Swift Programming Language
+// https://docs.swift.org/swift-book
