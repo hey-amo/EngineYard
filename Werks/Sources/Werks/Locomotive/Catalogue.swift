@@ -6,7 +6,7 @@
 //
 
 /// The 14 board spaces in their fixed, linear board order.
-/// The sequence is never shuffled; "next locomotive" means `id + 1`.
+/// The sequence is never shuffled; "next locomotive" means  safelty handling:`id + 1`.
 public enum Catalogue {
     public static let all: [LocomotiveDefinition] = [
         .init(id: 1, name: "Green.1st", livery: .green, generation: .first, cost: 4, maxDice: 3, cardCount: 4),

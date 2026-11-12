@@ -64,7 +64,7 @@ final class CatalogueTests: XCTestCase {
         }
 
         func testFreshBoardIsUnavailableWithAllCards() {
-            let board = Board()
+            let board = GameBoard()
             for space in board.spaces {
                 XCTAssertEqual(space.rust, .unavailable)
                 XCTAssertNil(space.initialOrder)

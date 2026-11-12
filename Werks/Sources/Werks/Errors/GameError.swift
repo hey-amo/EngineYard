@@ -6,6 +6,8 @@
 
 /// Why an action was rejected. A rejected action never changes the state.
 public enum GameError: Error, Equatable, Sendable {
+    /// default: catch-all if there was a corrupt game state
+    case gameStateError
     case invalidPlayerCount(Int)
     case gameOver
     /// The action is not allowed in the current phase.

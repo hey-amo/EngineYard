@@ -8,7 +8,7 @@
 import Foundation
 
 /// The 14 board spaces' mutable state, in fixed board order.
-public struct Board: Codable, Equatable, Sendable {
+public struct GameBoard: Codable, Equatable, Sendable {
     /// Index `i` holds board ID `i + 1`.
     public internal(set) var spaces: [LocomotiveState]
 
