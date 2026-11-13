@@ -2,8 +2,6 @@
 //  GameEvent.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
-//
 
 /// What happened as a result of an action. Feed these to the message log.
 /// All money movements appear as `.transaction`, issued only by the `Bank`.

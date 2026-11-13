@@ -2,8 +2,6 @@
 //  GameAction.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
-//
 
 /// Every way the game can be advanced. Player actions always apply to
 /// `GameState.currentPlayerID`.
