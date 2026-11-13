@@ -34,12 +34,13 @@ public struct CoinHandler: Codable, Sendable {
         self._coins = _coins
     }
     
-    public func perform(_ action: CoinAction) {
+    public mutating func perform(_ action: CoinAction) {
         switch action {
         case .add(let amount):
-            
+            self.add(amount)
             break
         case .subtract(let amount):
+            self.subtract(amount)
             break
         }
     }
