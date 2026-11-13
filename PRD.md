@@ -12,8 +12,8 @@ A UI-free, deterministic Swift package that implements the board game Locomotive
 
 ## 2. Architecture principles
 
-1. **Domain-driven design.** Each bounded concept is its own framework (a SwiftPM library target). A framework may contain several feature folders if they share the same context.
-2. **Folders are named for what they do.** Reading the folder tree should tell you what the game does. Avoid `Core`, `Services`, `Components`, `Utils`.
+1. Each bounded concept is its own folder if they share the same context.
+2. **Folders are named for what they do.
 3. **Single owner per concern.** Coins change only in `Banking`. Cards change only in `LocomotivePortfolio`. Production-unit arithmetic changes only in `ProductionCapacity`. Dice orders change only in `LocomotiveMarket`. Owners use `private(set)`, and phase code calls them rather than doing `+=` / `-=` itself.
 4. **Domain models are separate from infrastructure models.** Save-game records, DTOs and DB entities are never the domain types, even when the fields look identical. DRY means not duplicating *knowledge*. A DTO changes when the storage format changes, and a domain model changes when the business rules change.
 5. **Value types by default.** Models are `struct` / `enum` and `Sendable`. The only actor is the live-game store.
@@ -24,33 +24,33 @@ A UI-free, deterministic Swift package that implements the board game Locomotive
 ```text
 Sources/
 ├── LocomotiveCatalogue/        printed data of the 14 board spaces (never changes)
-│   └── Domain/{Models, Errors}
+│   └── {Models, Errors}
 ├── Banking/                    every coin, one owner
-│   └── Domain/{Models, Errors}
+│   └── {Models, Errors}
 ├── LocomotivePortfolio/        what a player owns
-│   ├── Domain/{Models, Errors}
+│   ├── {Models, Errors}
 │   ├── CardOwnership/          add, remove, remember developed cards
 │   └── ProductionCapacity/     add, spend, transfer, reset production units
 ├── LocomotiveMarket/           demand dice and card supply
-│   ├── Domain/{Models, Errors}
+│   ├── {Models, Errors}
 │   ├── OrderMatching/          same / lower / larger number sale decision
 │   ├── DemandGeneration/       0/1/2/3-generation market cases
 │   └── CardSupply/             withdrawing outdated cards, initial die
 ├── DiceRolling/
-│   ├── Domain/Protocols/       DieRoller
+│   ├── {Protocol}             DieRoller
 │   └── SeededRolling/          seeded, Codable implementation
 ├── GameRoundFlow/              who acts and in which phase
-│   ├── Domain/{Models, Actions, Events, Errors}
+│   ├── {Models, Actions, Events, Errors}
 │   ├── TableSetup/
-│   ├── LocomotiveDevelopment/  phase 1
-│   ├── CapacityExpansion/      phase 2
-│   ├── LocomotiveSales/        phase 3
-│   ├── TaxCollection/          phase 4
-│   ├── MarketDemandPhase/      phase 5
-│   ├── GameEndDetection/
+│   ├── Ph1-LocomotiveDev/          phase 1 (Locomotive development)
+│   ├── Ph2-CapacityExpansion/      phase 2
+│   ├── Ph3-LocomotiveSales/        phase 3
+│   ├── Ph4-TaxCollection/          phase 4
+│   ├── Ph5-MarketDemandPhase/      phase 5
+│   ├── GameEndDetection/       
 │   └── LegalMoveListing/
 ├── LiveGameSession/            one running game seen from outside
-│   ├── Domain/Models/          Game, GameUpdate
+│   ├── Models/          Game, GameUpdate
 │   ├── ReplayHistory/
 │   └── UpdateBroadcasting/     GameStore actor, AsyncStream subscribers
 └── GameMessageLog/
@@ -58,7 +58,7 @@ Sources/
 Tests/                          one test target per framework, same folder names
 ```
 
-Future, when saving is added: `SavedGames/Infrastructure/Persistence/{Models, StoreImplementation}` holds the stored record (`SavedGameRecord`) and its mapping to and from `GameState`.
+Future, when saving is added: `/Persistence/{Models, StoreImplementation}` holds the stored record (`SavedGameRecord`) and its mapping to and from `GameState`.
 
 **Dependency direction (no cycles):**
 `LocomotiveCatalogue`, `Banking`, `DiceRolling` ← `LocomotivePortfolio`, `LocomotiveMarket` ← `GameRoundFlow` ← `LiveGameSession` ← `GameMessageLog`
@@ -73,16 +73,8 @@ Cross-framework members that must be hidden from the app use Swift's `package` a
 
 1. **One error type per framework**, named for its context:
 
-   | Framework | Error type | Example cases |
-   |---|---|---|
-   | `LocomotiveCatalogue` | `CatalogueError` | `unknownLocomotive` |
-   | `Banking` | `BankingError` | `insufficientFunds(required:available:)` |
-   | `LocomotivePortfolio` | `CardOwnershipError` | `locomotiveNotOwned`, `alreadyDeveloped` |
-   | `LocomotivePortfolio` | `ProductionCapacityError` | `notEnoughUnits`, `invalidUnitCount` |
-   | `LocomotiveMarket` | `MarketError` | `locomotiveObsolete`, `noCardsAvailable`, `noMarketDemand` |
-   | `GameRoundFlow` | `RoundFlowError` | `wrongPhase`, `invalidPlayerCount`, `gameOver` |
-
    Numeric/unit problems (`ProductionCapacityError`) are never mixed with flow problems (`RoundFlowError`).
+   
 2. **An umbrella `EngineError` at the public boundary** wraps each context error:
    ```swift
    public enum EngineError: Error, Equatable, Sendable {
@@ -106,7 +98,7 @@ Cross-framework members that must be hidden from the app use Swift's `package` a
 - **3–4 players:** $12 each, one Green 1st card with 1 production unit per player, 3 dice in Green 1st existing orders, 1 die as Red 1st initial order.
 - **5 players:** $14 each, no cards, 1 die as Green 1st initial order.
 
-### Board (14 spaces, fixed order, never shuffled)
+### GameBoard (14 spaces, fixed order, never shuffled)
 
 | ID | Name | Cost | Max dice | Cards |
 |---|---|---|---|---|
@@ -126,6 +118,14 @@ Cross-framework members that must be hidden from the app use Swift's `package` a
 | 14 | Green 5th | 56 | 5 | 4 |
 
 Production cost = cost ÷ 2, rounded up. Income = production cost ÷ 2, rounded up. "Next locomotive" means ID + 1, and nothing follows ID 14. The dice-pool limit does not matter digitally, and neither do the physical counter limits.
+
+### Game loop
+
+```text
+each phase [] is done in turn order, before preceeding to the next one
+[Locomotive Development] -> [Production Capacity] -> [Locomotive production] -> [Pay taxes] *check for end game trigger here* -> Market demands -> [New round]
+```
+
 
 ### Round phases
 1. **Locomotive Development (optional).** Each player in turn may develop one locomotive. It needs an initial die or existing/filled orders, an available card, enough money, and the player must never have developed it before. On the first-ever purchase the initial die moves unchanged into existing orders, and the next space receives its one initial die, rolled once and never repopulated. When a 3rd, 4th or 5th generation is first bought, unsold cards of that colour two generations older are removed, but their dice stay.
@@ -156,10 +156,75 @@ Each card holds `units` and `spentUnits`.
 - Banking and portfolio are **not** separate actors, so validate-then-charge-then-add stays one atomic step.
 
 ## 8. Testing
-- XCTest, one test target per framework.
+- XCTest, one test target, with folders for the item being tested
 - Every rule gets a happy path, each rejection and a boundary.
 - The PDF rulebook examples (same, lower and larger number sales, the shift cost example) are tests.
 - A seeded random-play test checks invariants after every action.
 - A strategy game checks that games reach game over.
 - Replay from seed and actions must reproduce the same state.
 
+## 9. Expected screens
+
+This is when we implement visuals
+
+- Main Menu
+- Settings screen
+- New Game setup
+    - Select players (humans and bots)
+- Game board screen
+- Player profile card
+- My Portfolio (cards, production units, etc)
+- Phase1-screen
+- Phase2-screen
+- Phase3-screen
+- Phase4-screen (taxes)
+- Phase5-screen (market demands)
+- EoR-Reports-screen (end of round reports, end of round financial report?)
+- Winners-screen
+- Game message log (showing in-game messages, latest first, capped at 50 messages)
+- Financial reports
+- How to play screens (carousel style)
+
+Onboarding:  (with mascot)
+- Welcome to the game
+- How to play (carousel)
+    - Phase 1 short intro
+    - Phase 2 short intro
+    - Phase 3 short intro
+    - Phase 4 short intro
+    - Phase 5 short intro
+
+
+Modals
+- Tutorial hints/tips
+- Messages
+
+Drawers
+- My hand
+- Locomotive: View locomotive detail card
+- Locomotive: Enter production units with display of rivals who owns this, turn order
+
+### Game board screen intended structure
+
+[HUD: List of players, Hamburger menu] (sticky at top of screen)
+[Phase label]
+[Help mascot telling you what to do]
+[Game message mini view]
+[Game board]
+-- [List of locomotives with detail indicator]
+[Sticky at bottom: Tab bar? Buttons? Continue button?]
+
+### Hamburger menu
+
+- Settings
+- Load/save game (?)
+- My hand (?)
+- How to play (?)
+- Financial reports (?)
+- Quit game (ends current game, returns to main menu)
+
+## Other points
+
+Menu buttons, dialogs should not be clickable if animations are playing
+If the hamburger menu is pressed, the game is paused
+If the hamburger menu is dismissed, the game continues
