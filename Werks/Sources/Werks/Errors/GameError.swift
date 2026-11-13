@@ -18,6 +18,7 @@ public enum GameError: Error, Equatable, Sendable {
     case locomotiveObsolete(Int)
     case noCardsAvailable(Int)
     case alreadyDeveloped(Int)
+    /// money related
     case insufficientFunds(required: Int, available: Int)
     case locomotiveNotOwned(Int)
     case invalidUnitCount(Int)

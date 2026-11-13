@@ -27,16 +27,16 @@ public struct GameUpdate: Sendable, Equatable {
 }
 
 public actor GameStore {
-    public private(set) var game: Werks
+    public private(set) var game: WerksGame
     private var subscribers: [Int: AsyncStream<GameUpdate>.Continuation] = [:]
     private var nextSubscriberID = 0
 
-    public init(game: Werks) {
+    public init(game: WerksGame) {
         self.game = game
     }
 
     public init(players: [PlayerSetup], seed: UInt64, rules: GameRules = .standard) throws {
-        self.game = try Werks(players: players, seed: seed, rules: rules)
+        self.game = try WerksGame(players: players, seed: seed, rules: rules)
     }
 
     public var state: GameState { game.state }

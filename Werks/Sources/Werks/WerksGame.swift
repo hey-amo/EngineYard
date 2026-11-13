@@ -9,7 +9,7 @@
 /// Convenience value type for the app layer: the current state plus the
 /// message log and the action history (for replays). A plain value: for a
 /// shared, live game use `GameStore`, which serialises access.
-public struct Werks: Codable, Equatable, Sendable {
+public struct WerksGame: Codable, Equatable, Sendable {
     public let seed: UInt64
     public private(set) var state: GameState
     /// Every event so far, oldest first. Use `log.reversed()` for latest-first.
@@ -39,8 +39,8 @@ public struct Werks: Codable, Equatable, Sendable {
 
     /// Rebuilds a game by replaying actions from a seed.
     public static func replay(players: [PlayerSetup], seed: UInt64, rules: GameRules = .standard,
-                              actions: [GameAction]) throws -> Werks {
-        var game = try Werks(players: players, seed: seed, rules: rules)
+                              actions: [GameAction]) throws -> WerksGame {
+        var game = try WerksGame(players: players, seed: seed, rules: rules)
         for action in actions { try game.apply(action) }
         return game
     }

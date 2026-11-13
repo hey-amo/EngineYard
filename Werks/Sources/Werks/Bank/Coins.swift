@@ -57,7 +57,7 @@ public struct CoinHandler: Codable, Sendable {
     private mutating func subtract(_ amount: Int = 0) {
         guard amount > 0 else { return }
         guard available >= amount else { return }
-        guard available > self.minCoins else { return }
+        guard available > CoinRules.minCoins else { return }
         _coins -= amount
     }
 }
