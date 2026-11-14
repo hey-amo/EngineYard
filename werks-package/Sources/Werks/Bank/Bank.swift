@@ -27,6 +27,7 @@ public struct Bank: Codable, Equatable, Sendable {
 
     public func balance(of playerID: Int) -> Int { balances[playerID] }
 
+    /// @parameters: `amount: Int`,`playerID: Int`
     public func canAfford(_ amount: Int, _ playerID: Int) -> Bool { balances[playerID] >= amount }
 
     /// Throws `insufficientFunds` unless the player can pay `amount`.

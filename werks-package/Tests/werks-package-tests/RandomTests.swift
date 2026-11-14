@@ -7,7 +7,7 @@
 
 import Foundation
 import XCTest
-@testable import Werks
+@testable import werks_package
 
 final class RandomTests: XCTestCase {
     func testSameSeedSameSequence() {

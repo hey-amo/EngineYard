@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Werks
+@testable import werks_package
 
 
 final class CatalogueTests: XCTestCase {
