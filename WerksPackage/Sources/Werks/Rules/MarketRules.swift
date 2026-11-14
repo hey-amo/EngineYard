@@ -59,7 +59,7 @@ extension GameState {
     /// Customer Base is empty, the lowest Existing Orders die — rulebook p.7
     /// note), roll the rest, flag rusting.
     mutating func ageOlderGeneration(_ id: Int, events: inout [GameEvent]) {
-        if let die = board[id].returnOneDie() {
+        if let die = DiceTransferManager.returnOneDieToPool(id, in: &board) {
             events.append(.dieReturned(locomotiveID: id, die: die))
         }
         rollCustomerBase(id, events: &events)
@@ -80,10 +80,9 @@ extension GameState {
     }
 
     private mutating func rollCustomerBase(_ id: Int, events: inout [GameEvent]) {
-        guard !board[id].filledOrders.isEmpty else { return }
-        var space = board[id]
-        let rolled = space.rollFilledIntoExisting(using: &rng)
-        board[id] = space
-        events.append(.ordersRolled(locomotiveID: id, dice: rolled))
+        let rolled = DiceTransferManager.rollFilledOrders(id, using: &rng, in: &board)
+        if !rolled.isEmpty {
+            events.append(.ordersRolled(locomotiveID: id, dice: rolled))
+        }
     }
 }

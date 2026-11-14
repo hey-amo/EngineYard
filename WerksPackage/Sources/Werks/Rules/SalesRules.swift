@@ -12,6 +12,9 @@
 //  selling rounds run in turn order (each player makes at most one sale per round) until nobody can sell any more. Because each locomotive's dice and  units are independent of every other locomotive's, this gives exactly the
 //  same result as the rulebook's "each player sells all types, then the next player" ordering; only the order of log messages differs.
 //
+//  Note: SalesOrder.sell() handles all dice mutations (reducing demand or moving
+//  to customer base), so SalesRules doesn't directly use DiceTransferManager.
+//  The SalesOrder abstraction is the appropriate level for sales logic.
 
 extension GameState {
     /// Resolves the whole Production phase, then moves to Pay Taxes.
