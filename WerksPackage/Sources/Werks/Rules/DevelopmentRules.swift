@@ -46,7 +46,7 @@ extension GameState {
         events.append(.transaction(receipt))
         events.append(.developed(playerID: playerID, locomotiveID: locomotiveID))
 
-        if let die = board[locomotiveID].promoteInitialOrder() {
+        if let die = DiceTransferManager.promoteInitialToExisting(locomotiveID, in: &board) {
             events.append(.initialOrderPromoted(locomotiveID: locomotiveID, die: die))
             spawnInitialOrder(after: locomotiveID, events: &events)
             withdrawOutdatedCards(introducedBy: definition, events: &events)
