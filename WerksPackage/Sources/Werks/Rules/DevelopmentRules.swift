@@ -23,7 +23,7 @@ extension GameState {
             throw GameError.locomotiveUnavailable(locomotiveID)
         }
         guard space.availableCardCount > 0 else { throw GameError.noCardsAvailable(locomotiveID) }
-        guard !players[playerID].hand.hasHeld(locomotiveID) else {
+        guard !players[playerID].hand.contains(locomotiveID) else {
             throw GameError.alreadyDeveloped(locomotiveID)
         }
         try bank.requireFunds(definition.cost, from: playerID)

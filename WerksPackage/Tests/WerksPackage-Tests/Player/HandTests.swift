@@ -24,13 +24,14 @@ final class HandTests: XCTestCase {
         XCTAssertGameError(try hand.add(LocomotiveCard(locomotiveID: 1)), .alreadyDeveloped(1))
     }
 
-    func testRemovedCardStaysInHistoryAndCannotReturn() throws {
+    func testCanRebuyAfterRemovalAllowed() throws {
         var hand = Hand(cards: [LocomotiveCard(locomotiveID: 1)])
         let removed = try hand.remove(1)
         XCTAssertEqual(removed.locomotiveID, 1)
         XCTAssertFalse(hand.contains(1))
         XCTAssertTrue(hand.hasHeld(1))
-        XCTAssertGameError(try hand.add(LocomotiveCard(locomotiveID: 1)), .alreadyDeveloped(1))
+        try hand.add(LocomotiveCard(locomotiveID: 1))
+        XCTAssertTrue(hand.contains(1))
     }
 
     func testRemoveOrModifyMissingCard() {

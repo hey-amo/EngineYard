@@ -93,13 +93,14 @@ final class LocoDevelopmentTests: XCTestCase {
         XCTAssertRejects(.develop(locomotiveID: 1), in: state, with: .alreadyDeveloped(1))
     }
 
-    /// You can't develop something you previousily discarded (needs: Check of rules)
-    func testCannotRedevelopADiscardedCard() throws {
+    /// You can redevelop a locomotive after removing it from your hand (rebuy allowed)
+    func testCanRebuyAfterRemoval() throws {
         var state = Fixture.blank()
         state.setOrders(1, existing: [2])
         state.give(0, 1)
         try state.players[0].hand.remove(1)
-        XCTAssertRejects(.develop(locomotiveID: 1), in: state, with: .alreadyDeveloped(1))
+        let result = try GameEngine.apply(.develop(locomotiveID: 1), to: state)
+        XCTAssertTrue(result.state.players[0].hand.contains(1))
     }
 
     /// Test insufficient funds
