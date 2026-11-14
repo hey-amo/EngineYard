@@ -38,9 +38,9 @@ public struct Hand: Codable, Equatable, Sendable {
 
     // MARK: - Mutations
 
-    /// Adds a card. Fails if this locomotive was ever held before.
+    /// Adds a card. Fails if this locomotive is currently held (rebuy allowed).
     public mutating func add(_ card: LocomotiveCard) throws {
-        guard !hasHeld(card.locomotiveID) else { throw GameError.alreadyDeveloped(card.locomotiveID) }
+        guard !contains(card.locomotiveID) else { throw GameError.alreadyDeveloped(card.locomotiveID) }
         cards.append(card)
         cards.sort { $0.locomotiveID < $1.locomotiveID }
         history.insert(card.locomotiveID)
