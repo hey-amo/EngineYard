@@ -7,7 +7,7 @@
 
 import Foundation
 import XCTest
-@testable import werks_package
+@testable import WerksPackage
 
 final class BankTests: XCTestCase {
     

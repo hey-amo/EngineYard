@@ -1,5 +1,5 @@
 import XCTest
-@testable import werks_package
+@testable import WerksPackage
 
 final class WerksTests: XCTestCase {
     func testExample() throws {

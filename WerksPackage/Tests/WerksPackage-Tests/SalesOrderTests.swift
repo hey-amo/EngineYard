@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import werks_package
+@testable import WerksPackage
 
 /*
 /// The pure order-dice logic (port of the EngineYard SalesOrder).

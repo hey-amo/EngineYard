@@ -6,7 +6,9 @@
 //
 
 import XCTest
-@testable import werks_package
+@testable import WerksPackage
+
+// A collection of helper functions for testing
 
 /// Asserts that a throwing expression fails with a specific `GameError`.
 func XCTAssertGameError<T>(_ expression: @autoclosure () throws -> T, _ expected: GameError,
