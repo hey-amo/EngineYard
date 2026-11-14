@@ -2,13 +2,13 @@
 //  SalesOrderTests.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
+//  Created by AD on 12/11/2026.
 //
 
 import XCTest
 @testable import WerksPackage
 
-/*
+
 /// The pure order-dice logic (port of the EngineYard SalesOrder).
 final class SalesOrderTests: XCTestCase {
     func testQueriesMatchOriginalSalesOrderSemantics() {
@@ -192,4 +192,3 @@ final class ProductionPhaseTests: XCTestCase {
         XCTAssertTrue(result.events.contains(.productionReset))
     }
 }
-*/

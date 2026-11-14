@@ -2,7 +2,7 @@
 //  GameRules.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
+//  Created by AD on 12/11/2026.
 //
 
 /// From the rulebook, stored with the game.

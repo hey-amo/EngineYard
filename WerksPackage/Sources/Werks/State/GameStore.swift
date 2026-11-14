@@ -2,7 +2,7 @@
 //  GameStore.swift
 //  Werks
 //
-//  Created by Amarjit on 13/11/2026.
+//  Created by AD on 13/11/2026.
 //
 
 //  The single owner of a LIVE game. This is where locking belongs.

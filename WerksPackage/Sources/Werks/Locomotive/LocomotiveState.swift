@@ -2,7 +2,6 @@
 //  LocomotiveState.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
 //
 
 /// The mutable part of a board space. The printed data lives in

@@ -2,7 +2,6 @@
 //  Bank.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
 //
 
 //  The ONLY type that changes anyone's coins. Every change returns a

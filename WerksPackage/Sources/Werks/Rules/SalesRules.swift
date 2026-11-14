@@ -2,7 +2,7 @@
 //  SalesRules.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
+//  Created by AD on 12/11/2026.
 //
 
 //  Phase 3 – Locomotive Production. Fully automatic.

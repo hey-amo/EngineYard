@@ -2,7 +2,7 @@
 //  GamePhase.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
+//  Created by AD on 12/11/2026.
 //
 
 /// The phases of a round, in order, plus the terminal state.

@@ -2,7 +2,6 @@
 //  Catalogue.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
 //
 
 /// The 14 board spaces in their fixed, linear board order.

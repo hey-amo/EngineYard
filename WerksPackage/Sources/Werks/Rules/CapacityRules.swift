@@ -2,7 +2,7 @@
 //  CapacityRules.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
+//  Created by AD on 12/11/2026.
 //
 
 //  Phase 2 – Production Capacity. A player may take any number of buy/shift actions on their turn, then passes.

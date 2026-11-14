@@ -1,15 +1,14 @@
 //
-//  RandomTests.swift
+//  RandomnessTests.swift
 //  Werks
 //
-//  Created by Amarjit on 12/11/2026.
 //
 
 import Foundation
 import XCTest
 @testable import WerksPackage
 
-final class RandomTests: XCTestCase {
+final class RandomnessTests: XCTestCase {
     func testSameSeedSameSequence() {
         var a = SeededRandomNumberGenerator(seed: 42)
         var b = SeededRandomNumberGenerator(seed: 42)
