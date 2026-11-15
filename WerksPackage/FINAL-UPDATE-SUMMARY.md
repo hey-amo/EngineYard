@@ -68,7 +68,7 @@ All documents preserved:
 
 **Phase 1: Core Game & Sales (Current)**
 - [x] Update DevelopmentRules to allow rebuy, even though its bad strategy
-- [ ] Add test: `testCanRebuyAfterRemoval`
+- [x] Add test: `testCanRebuyAfterRemoval`
 - [ ] Implement [fix-sales-test-dice-logging-1] with console output
 - [x] Implement [fix-dice-transfer-manager-2] (centralize dice)
 - [ ] Implement [fix-sales-order-decision-tree-3]
