@@ -67,7 +67,7 @@ All documents preserved:
 **Updated checklist per PRD-UPDATE.md:**
 
 **Phase 1: Core Game & Sales (Current)**
-- [ ] Update DevelopmentRules to allow rebuy, even though its bad strategy
+- [x] Update DevelopmentRules to allow rebuy, even though its bad strategy
 - [ ] Add test: `testCanRebuyAfterRemoval`
 - [ ] Implement [fix-sales-test-dice-logging-1] with console output
 - [x] Implement [fix-dice-transfer-manager-2] (centralize dice)
