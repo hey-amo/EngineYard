@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "WerksPackage",
+    name: "Werks",
     platforms: [
         .iOS(.v17),
         .macOS(.v14),
@@ -13,17 +13,17 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "WerksPackage",
-            targets: ["WerksPackage"]),
+            name: "Werks",
+            targets: ["Werks"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "WerksPackage"),
+            name: "Werks"),
         .testTarget(
-            name: "WerksPackage-Tests",
-            dependencies: ["WerksPackage"]
+            name: "WerksTests",
+            dependencies: ["Werks"]
         ),
     ]
 )

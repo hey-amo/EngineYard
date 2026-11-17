@@ -26,7 +26,7 @@ struct EngineYardApp: App {
      */
     var body: some Scene {
         WindowGroup {
-            MainMenuScreen()
+            MainMenuView()
         }
         //.modelContainer(sharedModelContainer)
     }
