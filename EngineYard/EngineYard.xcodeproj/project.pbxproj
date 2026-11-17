@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D13BEFC30ACB13B00438C49 /* GameSettingsKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4D13BEFB30ACB13B00438C49 /* GameSettingsKit */; };
+		4D1EEB3830ACB5D900A8BF66 /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D1EEB3730ACB5D900A8BF66 /* Werks */; };
 		4D485DD330ACAA4C00CF7B7A /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D485DD230ACAA4C00CF7B7A /* Werks */; };
 		4D48D50D2FD6FA3300F8DAF9 /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D48D50C2FD6FA3300F8DAF9 /* Werks */; };
 /* End PBXBuildFile section */
@@ -44,7 +46,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D1EEB3830ACB5D900A8BF66 /* Werks in Frameworks */,
 				4D48D50D2FD6FA3300F8DAF9 /* Werks in Frameworks */,
+				4D13BEFC30ACB13B00438C49 /* GameSettingsKit in Frameworks */,
 				4D485DD330ACAA4C00CF7B7A /* Werks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -64,6 +68,7 @@
 			children = (
 				4D48D4DD2FD6F9B100F8DAF9 /* EngineYard */,
 				4D48D4F12FD6F9B200F8DAF9 /* EngineYardTests */,
+				4D7A4E5F30ACB53F00FEB233 /* Frameworks */,
 				4D48D4DC2FD6F9B100F8DAF9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -75,6 +80,13 @@
 				4D48D4EE2FD6F9B200F8DAF9 /* EngineYardTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4D7A4E5F30ACB53F00FEB233 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -99,6 +111,8 @@
 			packageProductDependencies = (
 				4D48D50C2FD6FA3300F8DAF9 /* Werks */,
 				4D485DD230ACAA4C00CF7B7A /* Werks */,
+				4D13BEFB30ACB13B00438C49 /* GameSettingsKit */,
+				4D1EEB3730ACB5D900A8BF66 /* Werks */,
 			);
 			productName = EngineYard;
 			productReference = 4D48D4DB2FD6F9B100F8DAF9 /* EngineYard.app */;
@@ -156,7 +170,8 @@
 			mainGroup = 4D48D4D22FD6F9B100F8DAF9;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				4D485DD130ACAA4C00CF7B7A /* XCLocalSwiftPackageReference "../Werks" */,
+				4D13BEFA30ACB13B00438C49 /* XCLocalSwiftPackageReference "../../_Common/GameSettingsKit" */,
+				4D1EEB3630ACB5D900A8BF66 /* XCLocalSwiftPackageReference "../Werks" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4D48D4DC2FD6F9B100F8DAF9 /* Products */;
@@ -491,13 +506,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		4D485DD130ACAA4C00CF7B7A /* XCLocalSwiftPackageReference "../Werks" */ = {
+		4D13BEFA30ACB13B00438C49 /* XCLocalSwiftPackageReference "../../_Common/GameSettingsKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../_Common/GameSettingsKit;
+		};
+		4D1EEB3630ACB5D900A8BF66 /* XCLocalSwiftPackageReference "../Werks" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Werks;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4D13BEFB30ACB13B00438C49 /* GameSettingsKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GameSettingsKit;
+		};
+		4D1EEB3730ACB5D900A8BF66 /* Werks */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Werks;
+		};
 		4D485DD230ACAA4C00CF7B7A /* Werks */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Werks;
