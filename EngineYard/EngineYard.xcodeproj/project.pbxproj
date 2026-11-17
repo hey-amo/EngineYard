@@ -11,6 +11,7 @@
 		4D1EEB3830ACB5D900A8BF66 /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D1EEB3730ACB5D900A8BF66 /* Werks */; };
 		4D485DD330ACAA4C00CF7B7A /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D485DD230ACAA4C00CF7B7A /* Werks */; };
 		4D48D50D2FD6FA3300F8DAF9 /* Werks in Frameworks */ = {isa = PBXBuildFile; productRef = 4D48D50C2FD6FA3300F8DAF9 /* Werks */; };
+		4D5410AE30ACBFF200B8179D /* GameMessagesKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4D5410AD30ACBFF200B8179D /* GameMessagesKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 				4D48D50D2FD6FA3300F8DAF9 /* Werks in Frameworks */,
 				4D13BEFC30ACB13B00438C49 /* GameSettingsKit in Frameworks */,
 				4D485DD330ACAA4C00CF7B7A /* Werks in Frameworks */,
+				4D5410AE30ACBFF200B8179D /* GameMessagesKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,6 +115,7 @@
 				4D485DD230ACAA4C00CF7B7A /* Werks */,
 				4D13BEFB30ACB13B00438C49 /* GameSettingsKit */,
 				4D1EEB3730ACB5D900A8BF66 /* Werks */,
+				4D5410AD30ACBFF200B8179D /* GameMessagesKit */,
 			);
 			productName = EngineYard;
 			productReference = 4D48D4DB2FD6F9B100F8DAF9 /* EngineYard.app */;
@@ -172,6 +175,7 @@
 			packageReferences = (
 				4D13BEFA30ACB13B00438C49 /* XCLocalSwiftPackageReference "../../_Common/GameSettingsKit" */,
 				4D1EEB3630ACB5D900A8BF66 /* XCLocalSwiftPackageReference "../Werks" */,
+				4D5410AC30ACBFF200B8179D /* XCLocalSwiftPackageReference "../../_Common/GameMessagesKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4D48D4DC2FD6F9B100F8DAF9 /* Products */;
@@ -514,6 +518,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../Werks;
 		};
+		4D5410AC30ACBFF200B8179D /* XCLocalSwiftPackageReference "../../_Common/GameMessagesKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../_Common/GameMessagesKit;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -532,6 +540,10 @@
 		4D48D50C2FD6FA3300F8DAF9 /* Werks */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Werks;
+		};
+		4D5410AD30ACBFF200B8179D /* GameMessagesKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GameMessagesKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

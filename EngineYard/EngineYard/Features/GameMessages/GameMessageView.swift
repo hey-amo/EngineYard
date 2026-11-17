@@ -7,13 +7,7 @@
 
 import Werks
 import SwiftUI
-
-/*
 import GameMessagesKit
-
-// Display a single game message
-// handle the :messageKind in colours
-
 
 // MARK: - Kind styling
 
@@ -82,4 +76,3 @@ struct GameMessageView: View {
     .background(Color.black)
     .preferredColorScheme(.dark)
 }
-*/

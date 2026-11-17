@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Werks
+import GameSettingsKit
 
 // Manage the in-game settings
 // :saves, :loads
